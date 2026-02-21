@@ -359,3 +359,20 @@ Rules:
 If an implementation cannot guarantee RFC8785 canonicalization, it MUST fail closed.
 
 
+
+
+
+## 2.3 Statement Digest Boundary
+
+The digest of a `statement` record MUST be computed over the canonical JSON form (RFC8785) of the statement object AFTER removing the following fields:
+
+- `_digest`
+- `_record_type`
+- `attestations`
+- `checkpoint`
+
+No other fields MAY be excluded.
+
+Implementations MUST fail verification if a stored `_digest` does not match the computed value under these rules.
+
+
