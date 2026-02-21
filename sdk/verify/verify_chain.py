@@ -1,10 +1,10 @@
 import hashlib
-import rfc8785
 import json
 import re
 import sys
 from typing import Any
 
+import rfc8785
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 
@@ -12,8 +12,9 @@ VERSION_RE = re.compile(r"^AAR-MCP-(\d+)\.(\d+)$")
 SUPPORTED_MAJOR = 2
 
 
-def canonical_json(obj: Any) -> str:
-    return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+def canonical_json_bytes(obj: Any) -> bytes:
+    # RFC8785 canonicalization for stable digest/signature input across implementations.
+    return rfc8785.dumps(obj)
 
 
 def sha256_hex(data: bytes) -> str:
@@ -21,7 +22,7 @@ def sha256_hex(data: bytes) -> str:
 
 
 def checkpoint_hash(checkpoint_obj: dict[str, Any]) -> str:
-    return "sha256:" + sha256_hex(canonical_json(checkpoint_obj).encode("utf-8"))
+    return "sha256:" + sha256_hex(canonical_json_bytes(checkpoint_obj))
 
 
 def merkle_root(leaves: list[str]) -> str | None:
@@ -123,7 +124,7 @@ def verify_chain(path: str, pubkey_path: str) -> int:
 
         payload = dict(cp)
         payload.pop("signature", None)
-        to_verify = canonical_json(payload).encode("utf-8")
+        to_verify = canonical_json_bytes(payload)
         try:
             public_key.verify(bytes.fromhex(signature_hex), to_verify)
         except (InvalidSignature, ValueError):
