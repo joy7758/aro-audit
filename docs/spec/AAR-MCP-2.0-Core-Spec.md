@@ -376,3 +376,26 @@ No other fields MAY be excluded.
 Implementations MUST fail verification if a stored `_digest` does not match the computed value under these rules.
 
 
+
+## 11. Versioning & Compatibility
+
+### 11.1 Semantic Stability
+本规范采用 “Core Freeze + Conformance Gate” 方式保证可依赖性：
+- Core Freeze：定义事实层、摘要边界、checkpoint 语义不可随意变更
+- Conformance Gate：以冻结向量保证任何实现都能被自动验证
+
+### 11.2 Non-breaking changes (Allowed)
+允许以下非破坏性变更：
+- 文档澄清（不改变验证结果）
+- 新增可选字段（不进入摘要边界）
+- 新增工具策略（不改变事实层摘要/封签语义）
+
+### 11.3 Breaking changes (Must bump)
+出现以下情况视为破坏性变更：
+- 改变摘要边界（Statement Digest Boundary）
+- 改变 checkpoint 覆盖区间语义
+- 改变 conformance 向量的 PASS/FAIL 结果
+
+### 11.4 RC policy
+- `spec/v2.0.0-rc1`：冻结核心语义 + conformance gate
+- 后续 rc 仅允许在不破坏 conformance 的前提下修订

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aro-audit.org/schema/AAR_v1.0.schema.json",
+  "title": "ARO-AUDIT AAR v1.0 Journal Record",
+  "description": "Schema for v1.0 statement/checkpoint records used by verifier and conformance vectors.",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "_record_type",
+        "_type",
+        "trace_context",
+        "subjects",
+        "predicateType",
+        "predicate",
+        "_digest"
+      ],
+      "properties": {
+        "_record_type": { "const": "statement" },
+        "_type": { "type": "string" },
+        "trace_context": {
+          "type": "object",
+          "required": ["trace_id", "sequence_no", "timestamp_ms", "prev_digest"],
+          "properties": {
+            "trace_id": { "type": "string" },
+            "sequence_no": { "type": "integer", "minimum": 0 },
+            "timestamp_ms": { "type": "integer", "minimum": 0 },
+            "prev_digest": {
+              "oneOf": [
+                { "type": "null" },
+                { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "subjects": { "type": "array" },
+        "predicateType": { "type": "string" },
+        "predicate": { "type": "object" },
+        "attestations": { "type": "array" },
+        "checkpoint": { "type": "object" },
+        "_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "required": [
+        "_record_type",
+        "range_start_seq",
+        "range_end_seq",
+        "merkle_root",
+        "store_fingerprint",
+        "checkpoint_sig",
+        "key_fingerprint"
+      ],
+      "properties": {
+        "_record_type": { "const": "checkpoint" },
+        "range_start_seq": { "type": "integer", "minimum": 0 },
+        "range_end_seq": { "type": "integer", "minimum": 0 },
+        "merkle_root": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "store_fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "checkpoint_sig": { "type": "string", "pattern": "^[0-9a-f]+$" },
+        "key_fingerprint": { "type": "string", "pattern": "^[0-9a-f]+$" },
+        "timestamp_ms": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    }
+  ]
+}
