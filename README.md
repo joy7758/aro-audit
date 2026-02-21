@@ -1,3 +1,11 @@
+# AAR/ALC (ARO-Audit)
+
+> **AAR-MCP-2.0 RC1（对外冻结）**：规范 + Conformance + 可下载 Bundle 已发布。
+> - 规范：`docs/spec/AAR-MCP-2.0-Core-Spec.md`
+> - Conformance：`spec/CONFORMANCE.md`
+> - Bundle：`release/spec_bundle_rc1.zip`
+> - 验证：运行 `./tools/run_conformance.sh`
+
 # AAR-MCP-2.0
 ## Evidence Layer for AI With Real Authority
 
