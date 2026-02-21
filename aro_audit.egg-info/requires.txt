@@ -1,0 +1,6 @@
+cryptography
+jsonschema
+duckdb
+orjson
+typer
+rfc8785

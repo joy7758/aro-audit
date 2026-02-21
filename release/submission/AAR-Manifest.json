@@ -1,0 +1,51 @@
+{
+  "manifest_version": "v1.0",
+  "generated_at_ms": 1771672513453,
+  "trace_id": "trace-demo-001",
+  "statement_count": 10,
+  "time_start_ms": 1771672513353,
+  "time_end_ms": 1771672513354,
+  "artifacts": {
+    "journal_path": "demo/out/journal.jsonl",
+    "journal_sha256": "sha256:1ac297af313df36d0a6e03ccb8b7a407591a5869f8a64c7f679f8e33d1f42dba",
+    "org_subkey_path": "demo/out/org_subkey_ed25519.pem"
+  },
+  "checkpoints": [
+    {
+      "range_start_seq": 0,
+      "range_end_seq": 3,
+      "merkle_root": "sha256:0de8bd171673d137441939d9a24d21681201ae36eabfbd7dfceba8c574916d11",
+      "store_fingerprint": "sha256:ae259399050667fe35a0fd249f92dc7db70983bfe89585cc56f4d74a45eaaf7c",
+      "key_fingerprint": "3ccb8ef4ec810a12",
+      "checkpoint_sig": "772ffb82ba1f124c62fc4a25bb04e0e5259c65fc4c762c17a90cf9e29b08ae4a1a9c3f6a9a5b4414bd8122c9365f22c21ccf10a30996c9cf9130a0c73a60460d",
+      "timestamp_ms": 1771672513354
+    },
+    {
+      "range_start_seq": 4,
+      "range_end_seq": 7,
+      "merkle_root": "sha256:0d85ccc0fbb616fd67de5cfd0c54e2ccb6bfc4790f03ee75ed30f8432fb3a480",
+      "store_fingerprint": "sha256:542106bdc6015047acdd5746328149cefea114ab8a1010509e8e98de82e01829",
+      "key_fingerprint": "3ccb8ef4ec810a12",
+      "checkpoint_sig": "b60ca0235056054acfe939459516751ecf1548200b1842ab92703d7974b4ac95221d445688aa4a8b814616964109895bf17068f2e03ae2451b248f197cdf7509",
+      "timestamp_ms": 1771672513354
+    },
+    {
+      "range_start_seq": 8,
+      "range_end_seq": 9,
+      "merkle_root": "sha256:7163f352a5f99c47fa44310718c9db255b98a474017667dea263c85d28501e1f",
+      "store_fingerprint": "sha256:39a311c0fd0447ea965e3c6ee4e1b4fec8df4aae445577c7fb0b662bfcaac937",
+      "key_fingerprint": "3ccb8ef4ec810a12",
+      "checkpoint_sig": "03871437535e95372370651653562cfda5df9725c36341c9839843dd0d420cb32c609e26739c5e135c736aa10fc7cfef39a9972b35d910f9e39e3235cb0f5b03",
+      "timestamp_ms": 1771672513354
+    }
+  ],
+  "revocation_snapshot": {
+    "key_fingerprint": "3ccb8ef4ec810a12",
+    "status": "VALID",
+    "snapshot_ms": 1771672513453,
+    "note": "v1.0 最小实现：仅声明当前 sub-key 有效；后续升级 CRL/OCSP/吊销列表。"
+  },
+  "verification": {
+    "command": "python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_subkey_ed25519.pem"
+  }
+}

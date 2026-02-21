@@ -1,0 +1,2 @@
+[console_scripts]
+aro = sdk.cli.aro:app

@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\lstset{breaklines=true,breakatwhitespace=false}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
+
+\title{AAR/ALC: WORM-Backed Verifiable Statements for Non-Repudiable Agent Auditing (v1.0 Baseline)}
+\author{Zhang Bin}
+\date{2026-02-21}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+AI agents are rapidly entering production environments, but current audit trails are often non-deterministic, privacy-leaking, or non-verifiable, making post-incident attribution and compliance difficult. We introduce \textbf{Agent Action Receipts (AAR)} and \textbf{Agent Liability Chains (ALC)}: an attestation-grade auditing substrate that turns agent tool invocations into \textbf{verifiable statements} stored in an append-only \textbf{WORM} journal. AAR/ALC provides deterministic hashing (RFC 8785 JCS + SHA-256), chain integrity (prev-digest), periodic checkpoint sealing (range + Merkle root + store fingerprint), and organization-level accountability via sub-key checkpoint signatures. We provide reproducible artifacts and a verification command enabling third-party independent validation.
+\end{abstract}
+
+\section{Problem Statement}
+Production agents face three governance gaps:
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{Privilege confusion and overreach} (permission fragmentation, prompt injection, ``confusable deputy'' risk)
+  \item \textbf{Non-replayable evidence} (logs are incomplete, scattered, or mutable)
+  \item \textbf{Non-admissible records} (difficult to independently verify and to sample-audit at scale)
+\end{enumerate}
+These gaps translate to board-level risk and impede compliance adoption.
+
+\section{Design Goals}
+\begin{itemize}
+  \item \textbf{Verifiability:} third parties can recompute hashes and validate seals
+  \item \textbf{Non-repudiation (baseline):} organization-level checkpoint signing (Level-1 evidence)
+  \item \textbf{Privacy-first:} No-Plaintext rule; store hashes + controlled locators only
+  \item \textbf{Reproducibility:} test vectors + deterministic canonicalization (RFC 8785 JCS)
+  \item \textbf{Low-friction adoption:} CLI first, MCP insertion point later
+\end{itemize}
+
+\section{AAR v1.0 Baseline}
+Each AAR is a verifiable statement (JSON object) written to an append-only JSONL journal.
+
+\subsection{Frozen Rule \#1: Canonicalization + Digest + Signing Input}
+AAR v1.0 fixes:
+\begin{itemize}
+  \item Redaction first (No-Plaintext)
+  \item Signature input object $S_{\text{sig}}$ excludes \texttt{attestations} and \texttt{checkpoint}
+  \item Canonicalization: RFC 8785 JCS $\rightarrow$ \texttt{canonical\_bytes}
+  \item Digest: \texttt{sha256(canonical\_bytes)} $\rightarrow$ \texttt{sha256:<hex>}
+  \item Attestations bind \texttt{signed\_digest} (baseline binds digest)
+\end{itemize}
+
+\section{ALC and Checkpoint Sealing}
+\subsection{Frozen Rule \#2: WORM Checkpoint with Explicit Coverage Range}
+Every $N$ statements a checkpoint record is appended:
+\begin{itemize}
+  \item \texttt{range\_start\_seq..range\_end\_seq}
+  \item \texttt{merkle\_root} over statement digests in range
+  \item \texttt{store\_fingerprint} (sha256 over journal bytes at seal time)
+  \item \texttt{checkpoint\_sig} signed by organization sub-key
+\end{itemize}
+Deletion or mutation becomes detectable via independent verification.
+
+\subsection{Frozen Rule \#3: Single-writer per Trace (v1.0)}
+A single writer per trace ensures a linear time-arrow:
+\begin{itemize}
+  \item \texttt{sequence\_no} monotonic
+  \item \texttt{prev\_digest} equals prior statement digest
+\end{itemize}
+Multi-writer is out-of-scope for v1.0 and requires sub-trace anchoring.
+
+\section{Reproducibility and Independent Verification}
+We publish an artifact bundle (\texttt{audit\_packet.zip}) containing:
+\begin{itemize}
+  \item \texttt{journal.jsonl} (facts)
+  \item \texttt{AAR-Manifest.json} (summary + verification command)
+  \item \texttt{verify.sh} (one-command verification)
+\end{itemize}
+
+\noindent Example verification command:
+\begin{lstlisting}
+python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_subkey_ed25519.pem
+\end{lstlisting}
+
+\begin{sloppypar}
+\noindent Example journal fingerprint (artifact integrity):
+\begin{lstlisting}
+journal_sha256 = sha256:454af6b2e69182167e141cc9013cb4cc5a0e36494600cbc83cefc6cb6e7f327c
+\end{lstlisting}
+\end{sloppypar}
+
+\section{MCP Insertion Point (Roadmap)}
+The shortest must-pass gate is tool invocation in MCP servers:
+wrap \texttt{call\_tool} to emit AAR before/after tool execution and enforce ``no AAR pointer, no enterprise acceptance'' at gateways.
+
+\section{Discussion: Evidence Levels and Commercialization}
+Open layer: schema + journal + verify (adoption).\\
+Paid layer: policy packs, certification, proof-as-a-service (interpretation/recognition network).\\
+Risk scoring remains in interpretation layers (Index/Manifest), not in the immutable fact journal.
+
+\section{Conclusion}
+AAR/ALC converts agent actions into deterministic, privacy-first, independently verifiable records with organization-level accountability. The v1.0 baseline establishes a minimal substrate for enterprise-grade governance and standards participation.
+
+\end{document}
