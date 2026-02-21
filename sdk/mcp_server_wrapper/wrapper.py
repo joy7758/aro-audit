@@ -13,7 +13,7 @@ import yaml
 from cryptography.hazmat.primitives import serialization
 
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
-from sdk.mcp_server_wrapper.dependency_guard import check_dependency
+from sdk.mcp_server_wrapper.dependency_guard import check_dependency, get_latest_checkpoint_root
 
 PROTOCOL_VERSION = "AAR-MCP-2.0"
 TOOL_CALL_METHODS = {"tools/call", "call_tool"}
@@ -182,11 +182,11 @@ def write_checkpoint_segmented(
     state.pending_aar_lines.clear()
 
 
-def send_error_response(req_id: Any, message: str) -> None:
+def send_error_response(req_id: Any, message: str, code: int = -32000) -> None:
     payload = {
         "jsonrpc": "2.0",
         "id": req_id,
-        "error": {"code": -32000, "message": message},
+        "error": {"code": code, "message": message},
     }
     sys.stdout.write(canonical_json(payload) + "\n")
     sys.stdout.flush()
@@ -252,20 +252,26 @@ def main() -> int:
                 tool_call = extract_tool_call(message)
                 if tool_call:
                     tool_name, tool_args = tool_call
-                    risk_level = "high" if tool_name in high_risk_tools else "low"
                     incoming_json = tool_args if isinstance(tool_args, dict) else {}
-                    allowed, reason = check_dependency(
-                        incoming_json,
-                        journal_path=args.journal,
-                        risk_level=risk_level,
-                        tool_name=tool_name,
-                        policy=policy,
-                    )
-                    if (not allowed) and fail_closed:
-                        send_error_response(req_id, f"Dependency guard failed: {reason}")
-                        continue
-
                     if tool_name in high_risk_tools:
+                        required_checkpoint_root = None
+                        if isinstance(incoming_json, dict):
+                            required_checkpoint_root = incoming_json.get("required_checkpoint_root")
+                        current_checkpoint_root = get_latest_checkpoint_root(args.journal)
+                        decision = check_dependency(
+                            required_checkpoint_root=required_checkpoint_root,
+                            current_checkpoint_root=current_checkpoint_root,
+                            tool_name=tool_name,
+                            policy=policy,
+                        )
+                        if (not decision.ok) and fail_closed:
+                            send_error_response(
+                                req_id,
+                                f"Dependency guard failed: {decision.code}: {decision.message}",
+                                code=-32020,
+                            )
+                            continue
+
                         try:
                             write_aar(journal, state, tool_name, tool_args)
                             if auto_checkpoint:

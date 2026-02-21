@@ -1,12 +1,33 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
+import json
+from pathlib import Path
 
 @dataclass
 class DependencyDecision:
     ok: bool
     code: str
     message: str
+
+
+def get_latest_checkpoint_root(journal_path: str) -> Optional[str]:
+    p = Path(journal_path)
+    if not p.exists():
+        return None
+    last_root: Optional[str] = None
+    with p.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            if obj.get("type") == "CHECKPOINT":
+                last_root = obj.get("merkle_root")
+    return last_root
 
 def _get(d: Dict[str, Any], path: str, default=None):
     cur: Any = d
