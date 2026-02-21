@@ -1,3 +1,14 @@
+## AAR-MCP-2.0 Core Specification
+
+The AAR-MCP-2.0 Core Specification is frozen as Release Candidate (rc1).
+
+See:
+docs/spec/AAR-MCP-2.0-Core-Spec.md
+
+Tag:
+spec/v2.0.0-rc1
+
+---
 # aro-audit
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
