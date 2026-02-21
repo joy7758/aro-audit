@@ -3,6 +3,20 @@
 # Copyright (c) 2026 joy7758 contributors
 from __future__ import annotations
 
+
+def normalize_for_digest(statement_obj: dict) -> dict:
+    """
+    Digest boundary (v1.0):
+    MUST exclude: _digest, _record_type, attestations, checkpoint
+    """
+    obj = dict(statement_obj)
+    obj.pop("_digest", None)
+    obj.pop("_record_type", None)
+    obj.pop("attestations", None)
+    obj.pop("checkpoint", None)
+    return obj
+
+
 import os, sys, json, hashlib
 from typing import Any, Dict, List, Optional
 
@@ -99,7 +113,7 @@ def main() -> int:
                 if prev_digest != prev:
                     return fail(f"line {lineno}: prev_digest mismatch. expected {prev}, got {prev_digest}")
 
-                digest = compute_digest(obj)
+                digest = compute_digest(normalize_for_digest(obj))
                 stored = obj.get("_digest")
                 if stored != digest:
                     return fail(f"line {lineno}: digest mismatch. stored {stored}, computed {digest}")
