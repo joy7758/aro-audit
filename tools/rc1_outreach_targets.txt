@@ -1,0 +1,10 @@
+modelcontextprotocol/servers
+modelcontextprotocol/python-sdk
+modelcontextprotocol/typescript-sdk
+langchain-ai/langchain
+langchain-ai/langgraph
+microsoft/autogen
+openai/openai-agents-python
+anthropics/claude-code
+crewAIInc/crewAI
+pydantic/pydantic-ai
