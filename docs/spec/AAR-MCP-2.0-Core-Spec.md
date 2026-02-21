@@ -342,3 +342,20 @@ The following aliases MAY be accepted for backward compatibility:
 
 Any other `_record_type` value MUST cause verification failure.
 
+
+
+
+## 2.2 Canonicalization (JCS)
+
+All digests and signatures MUST be computed over the canonical JSON form of the input object using
+RFC 8785 JSON Canonicalization Scheme (JCS).
+
+Rules:
+- The canonicalization input MUST be UTF-8 JSON text.
+- Object member order MUST be canonicalized by JCS (implementations MUST NOT rely on input ordering).
+- Whitespace MUST NOT affect the digest (canonical JSON contains no insignificant whitespace).
+- Numbers MUST follow RFC8785 canonical form (implementations MUST NOT use language-default float formatting).
+
+If an implementation cannot guarantee RFC8785 canonicalization, it MUST fail closed.
+
+

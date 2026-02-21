@@ -1,4 +1,5 @@
 import hashlib
+import rfc8785
 import json
 import re
 import sys
