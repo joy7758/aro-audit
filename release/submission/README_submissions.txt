@@ -7,7 +7,7 @@
 4) AAR_v1.0.md：协议冻结规范（硬规则）
 
 复核命令（见 manifest 也可）：
-python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_subkey_ed25519.pem
+python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_pubkey_ed25519.pem
 
 备注：
-- demo 包含子密钥 pem 仅用于复现；生产环境不建议外发私钥
+- 验证只需公钥材料（org_pubkey_ed25519.pem）；私钥不在交付包内

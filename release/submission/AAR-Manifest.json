@@ -1,51 +1,51 @@
 {
   "manifest_version": "v1.0",
-  "generated_at_ms": 1771672513453,
+  "generated_at_ms": 1771680469084,
   "trace_id": "trace-demo-001",
   "statement_count": 10,
-  "time_start_ms": 1771672513353,
-  "time_end_ms": 1771672513354,
+  "time_start_ms": 1771680469008,
+  "time_end_ms": 1771680469009,
   "artifacts": {
     "journal_path": "demo/out/journal.jsonl",
-    "journal_sha256": "sha256:1ac297af313df36d0a6e03ccb8b7a407591a5869f8a64c7f679f8e33d1f42dba",
-    "org_subkey_path": "demo/out/org_subkey_ed25519.pem"
+    "journal_sha256": "sha256:dde54738c49c372e56d977e60ca54762bacedc7fcd27a18f9355ca9b1b6a1eeb",
+    "org_pubkey_path": "demo/out/org_pubkey_ed25519.pem"
   },
   "checkpoints": [
     {
       "range_start_seq": 0,
       "range_end_seq": 3,
-      "merkle_root": "sha256:0de8bd171673d137441939d9a24d21681201ae36eabfbd7dfceba8c574916d11",
-      "store_fingerprint": "sha256:ae259399050667fe35a0fd249f92dc7db70983bfe89585cc56f4d74a45eaaf7c",
+      "merkle_root": "sha256:ce32fddbccf5eae3e4412120f05fb99de6a37860c363faef43f852f57f99b11a",
+      "store_fingerprint": "sha256:c845da9404d1a90c997f5aee26ca53c0b2bf4f0ffe4bf3fb287eedbc96e158b6",
       "key_fingerprint": "3ccb8ef4ec810a12",
-      "checkpoint_sig": "772ffb82ba1f124c62fc4a25bb04e0e5259c65fc4c762c17a90cf9e29b08ae4a1a9c3f6a9a5b4414bd8122c9365f22c21ccf10a30996c9cf9130a0c73a60460d",
-      "timestamp_ms": 1771672513354
+      "checkpoint_sig": "2f01c142a1f3c06d988619d158aa1c21ce37d14e41574d42d920a80d683c38c2e593d13d5937827cd2c986edce1f229826b830c0beff34c8adf251d0d39ae90f",
+      "timestamp_ms": 1771680469008
     },
     {
       "range_start_seq": 4,
       "range_end_seq": 7,
-      "merkle_root": "sha256:0d85ccc0fbb616fd67de5cfd0c54e2ccb6bfc4790f03ee75ed30f8432fb3a480",
-      "store_fingerprint": "sha256:542106bdc6015047acdd5746328149cefea114ab8a1010509e8e98de82e01829",
+      "merkle_root": "sha256:03399c6e0869802a3b806f1bb802cf9be042b75f96a39638679c06c9800873c6",
+      "store_fingerprint": "sha256:0e41c5d02c9ae3e0d12fc07d5e0e05bbe6097f7223da21e1b3abbff06ed7033f",
       "key_fingerprint": "3ccb8ef4ec810a12",
-      "checkpoint_sig": "b60ca0235056054acfe939459516751ecf1548200b1842ab92703d7974b4ac95221d445688aa4a8b814616964109895bf17068f2e03ae2451b248f197cdf7509",
-      "timestamp_ms": 1771672513354
+      "checkpoint_sig": "94cfc0daaa35097d6b3df095b2aac095e872174b6b48549cba266380290257ba3ca927703b1c14c2f6a3fa4d389c6417288f65d66fbabef4a3ff72e717124a02",
+      "timestamp_ms": 1771680469009
     },
     {
       "range_start_seq": 8,
       "range_end_seq": 9,
-      "merkle_root": "sha256:7163f352a5f99c47fa44310718c9db255b98a474017667dea263c85d28501e1f",
-      "store_fingerprint": "sha256:39a311c0fd0447ea965e3c6ee4e1b4fec8df4aae445577c7fb0b662bfcaac937",
+      "merkle_root": "sha256:82d31c315e7d419701cf1ecd862e28515d60413355287e017bde0ac07977a6bc",
+      "store_fingerprint": "sha256:aa45b2eb3d89c9d101aa977d1f536a49a55c0a1318e3d3549d6574086fdca462",
       "key_fingerprint": "3ccb8ef4ec810a12",
-      "checkpoint_sig": "03871437535e95372370651653562cfda5df9725c36341c9839843dd0d420cb32c609e26739c5e135c736aa10fc7cfef39a9972b35d910f9e39e3235cb0f5b03",
-      "timestamp_ms": 1771672513354
+      "checkpoint_sig": "8a3932b434ecc33d803842d07d010847084d86879496d9a94a1d8e4ce447b50b2be13c417e423eda9bfff272921a60a0d7b08f31fc02d073f3b41102e00e740b",
+      "timestamp_ms": 1771680469009
     }
   ],
   "revocation_snapshot": {
     "key_fingerprint": "3ccb8ef4ec810a12",
     "status": "VALID",
-    "snapshot_ms": 1771672513453,
+    "snapshot_ms": 1771680469084,
     "note": "v1.0 最小实现：仅声明当前 sub-key 有效；后续升级 CRL/OCSP/吊销列表。"
   },
   "verification": {
-    "command": "python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_subkey_ed25519.pem"
+    "command": "python sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_pubkey_ed25519.pem"
   }
 }
