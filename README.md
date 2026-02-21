@@ -1,73 +1,150 @@
-# aro-audit (AAR/ALC v1.0 Baseline)
+# aro-audit
 
-**中文**：面向 AI 代理（Agent）生产环境的**责任审计底座**：把“日志”升级为**可核验陈述（AAR）+ 责任链（ALC）+ WORM 封签 + 组织子密钥签名**，支持第三方独立复核。  
-**English**: A sovereign-grade auditing substrate for production AI agents: **verifiable statements (AAR) + liability chain (ALC) + WORM sealing + org sub-key signatures**, enabling independent third-party verification.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![License](https://img.shields.io/badge/License-MIT-0E8A16)](#license)
+[![Status](https://img.shields.io/badge/Status-P0%20Remediated-0A7D32)](README.md)
 
----
+> AAR/ALC v1.0 baseline for production-grade AI agent auditing.
+>
+> 面向 AI Agent 生产场景的 AAR/ALC v1.0 审计基线实现。
 
-## 你能得到什么 / What you get
+## Overview | 项目概览
 
-- **WORM JSONL Journal（事实源）**：append-only 记录，每条 action 都可重算 digest  
-- **Chain Integrity（时间之箭）**：`prev_digest` 链防篡改  
-- **Checkpoint Sealing（区间封签）**：`range + merkle_root + store_fingerprint`  
-- **Org Accountability（组织责任归属）**：checkpoint 使用 Ed25519 子密钥签名（Level-1 证据）  
-- **Independent Verification（独立复核）**：`verify` 工具可第三方重算与验签  
-- **Compliance Export Kit（合规导出包）**：`AAR-Manifest.json`  
-- **Audit Packet（可交付审计包）**：`audit_packet.zip`  
-- **CLI 入口（开发者入口）**：`aro gen-demo / verify / export`
+`aro-audit` turns plain logs into independently verifiable evidence:
 
----
+- Verifiable statements (`AAR`)
+- Liability chain (`ALC`) via `prev_digest`
+- Checkpoint sealing (`range + merkle_root + store_fingerprint + checkpoint_sig`)
+- Org accountability through Ed25519 signatures
+- Public-key-only verification for third-party auditors
 
-## 快速开始 / Quickstart
+`aro-audit` 将普通日志升级为可独立复核的证据链：
 
-### 1) 创建虚拟环境与安装依赖
+- 可核验陈述（`AAR`）
+- 通过 `prev_digest` 形成责任链（`ALC`）
+- 区间封签（`range + merkle_root + store_fingerprint + checkpoint_sig`）
+- 使用 Ed25519 签名完成组织责任绑定
+- 验证端仅需公钥材料
+
+## Why It Matters | 价值点
+
+| Capability | 中文 | English |
+| --- | --- | --- |
+| Tamper evidence | `sequence_no + prev_digest` 线性链路防篡改 | Linear chain protects event ordering and integrity |
+| Independent verification | 第三方只需 `journal + pubkey` 即可验签 | Verifiers need only `journal + public key` |
+| Compliance export | 自动生成 `AAR-Manifest.json` 与校验命令 | Exportable manifest for compliance workflows |
+| Deliverable packet | 产出 `audit_packet.zip` 可直接交付复核 | Ready-to-share packet for review and handoff |
+
+## Quickstart (1 minute) | 1 分钟跑通
+
+### 1) Environment setup | 环境准备
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -U pip
 python3 -m pip install -r requirements.txt
-2) 生成 demo（journal + checkpoint + 子密钥）
+python3 -m pip install -e .
+```
+
+### 2) Generate demo journal | 生成 demo 日志
+
+```bash
 aro gen-demo
-3) 复核（第三方独立验证）
-aro verify
-# 或：
-python3 sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_pubkey_ed25519.pem
-4) 导出 Manifest（合规交差包）
+```
+
+### 3) Export manifest + clean audit packet | 导出清单与审计包
+
+```bash
 aro export
-# 产物：demo/out/AAR-Manifest.json
-产物说明 / Artifacts
+```
 
-demo/out/journal.jsonl：事实源（statement + checkpoint）
+### 4) Verify with public key only | 仅用公钥验证
 
-demo/out/AAR-Manifest.json：导出摘要（含复核命令、checkpoint 汇总）
+```bash
+python3 sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_pubkey_ed25519.pem
+```
 
-demo/out/audit_packet.zip：审计包（journal + manifest + verify.sh + README + 公钥）
+Expected output | 预期输出：
 
-docs/preprint_arxiv.pdf：3页论文（可投递）
+```text
+VERIFY_OK: demo/out/journal.jsonl statements= 10
+```
 
-release/aro_submission_bundle.zip：投递包（论文 + 审计包 + 规范）
+## CLI Commands | 命令说明
 
-⚠️ 安全提示：验证只需 `demo/out/org_pubkey_ed25519.pem`。demo 私钥仅用于本地签名，不进入交付包。
+| Command | 中文 | English |
+| --- | --- | --- |
+| `aro gen-demo` | 生成 demo `journal` 与 `checkpoint`，并导出公钥 | Generate demo journal/checkpoints and export public key |
+| `aro verify` | 使用公钥进行完整校验 | Run end-to-end verification with public key |
+| `aro export` | 生成 `AAR-Manifest.json` 与 `audit_packet.zip` | Export manifest and build audit packet |
 
-目录结构 / Repo Layout
+## Artifact Outputs | 产物说明
+
+### `demo/out/`
+
+- `journal.jsonl`: append-only fact source
+- `AAR-Manifest.json`: summary, checkpoint index, verify command
+- `org_pubkey_ed25519.pem`: public key for independent verification
+- `verify.sh`: one-command verification script
+- `README.txt`: packet usage instructions
+- `audit_packet.zip`: clean deliverable package (no private key)
+
+### `release/submission/`
+
+- `AAR-Manifest.json`
+- `audit_packet.zip`
+- `README_submissions.txt`
+- paper/spec files for submission packaging
+
+Top-level submission bundle:
+
+- `release/aro_submission_bundle.zip`
+
+## Security Boundary (P0) | 安全边界（P0）
+
+- Verification is public-key-only.
+- `manifest` stores `org_pubkey_path` (not private key path).
+- CLI execution uses `subprocess.run(..., shell=False)` (no `os.system`).
+- Private keys are for local signing only and are excluded from deliverable zips.
+- `.gitignore` excludes `.venv/`, `demo/out/*.pem`, `demo/out/*.zip`, `__pycache__/`, `*.pyc`, `.DS_Store`.
+
+## Repository Layout | 目录结构
+
+```text
 sdk/
-  journal/        WORM journal writer (JSONL)
-  verify/         verification (digest/chain/merkle/signature)
-  keys/           org sub-key (Ed25519) utilities
   cli/            aro CLI
-pro/export/       manifest exporter
-spec/             AAR v1.0 spec + test_vectors
-docs/             pitch + preprint (md/tex/pdf)
-demo/             demo generator
-release/          submission bundles
-v1.0 冻结规则 / v1.0 Frozen Rules
+  journal/        WORM JSONL writer
+  keys/           Ed25519 key utilities
+  verify/         digest/chain/checkpoint verification
+pro/
+  export/         AAR manifest exporter
+demo/
+  gen_journal.py  demo generator
+spec/
+  AAR_v1.0.md     frozen rules + vectors
+release/
+  submission/     release artifacts
+```
 
-Signing input: redact first; sign canonicalized statement excluding attestations and checkpoint
+## v1.0 Frozen Rules | v1.0 冻结规则
 
-Checkpoint sealing: explicit coverage range + merkle_root + store_fingerprint + checkpoint_sig
+1. Redact first, then sign canonicalized statement bytes.
+2. Checkpoint must include explicit coverage and signature material.
+3. Single-writer per trace (`sequence_no` strictly monotonic, `prev_digest` linked).
 
-Single-writer per trace: linear sequence_no and prev_digest
+## FAQ
 
-License
+### Do verifiers need private keys? | 验证方是否需要私钥？
+
+No. Verification uses public key only.  
+不需要。验证仅依赖公钥。
+
+### Is demo private key shipped in release bundles? | 交付包里会包含 demo 私钥吗？
+
+No. Deliverable packets are built without private keys.  
+不会。交付包已排除私钥材料。
+
+## License
 
 MIT
