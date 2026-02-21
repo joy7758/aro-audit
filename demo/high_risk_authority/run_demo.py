@@ -1,6 +1,7 @@
 import json
 import hashlib
 import os
+import argparse
 from datetime import datetime, timezone
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
@@ -29,17 +30,18 @@ def merkle_root(leaves):
         nodes = new_level
     return nodes[0]
 
-def generate_keys():
+def generate_keys(export_private: bool = False):
     private_key = Ed25519PrivateKey.generate()
     public_key = private_key.public_key()
 
-    with open(PRIVKEY_PATH, "wb") as f:
-        f.write(private_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption()
-        ))
-    os.chmod(PRIVKEY_PATH, 0o600)
+    if export_private:
+        with open(PRIVKEY_PATH, "wb") as f:
+            f.write(private_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption()
+            ))
+        os.chmod(PRIVKEY_PATH, 0o600)
 
     with open(PUBKEY_PATH, "wb") as f:
         f.write(public_key.public_bytes(
@@ -50,8 +52,20 @@ def generate_keys():
     return private_key
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--export-private-key",
+        action="store_true",
+        help="Export private.pem for lab/debug only (not recommended).",
+    )
+    args = parser.parse_args()
+
+    # 默认不落盘私钥；若历史文件存在则清理，避免误导。
+    if not args.export_private_key and os.path.exists(PRIVKEY_PATH):
+        os.remove(PRIVKEY_PATH)
+
     # 生成密钥
-    private_key = generate_keys()
+    private_key = generate_keys(export_private=args.export_private_key)
 
     # 清空旧 journal
     open(JOURNAL_PATH, "w").close()
@@ -96,6 +110,10 @@ def main():
     print("Amount transferred: 100000")
     print("Journal:", JOURNAL_PATH)
     print("Public key:", PUBKEY_PATH)
+    if args.export_private_key:
+        print("Private key exported:", PRIVKEY_PATH)
+    else:
+        print("Private key handling: in-memory only (recommended)")
 
 if __name__ == "__main__":
     main()

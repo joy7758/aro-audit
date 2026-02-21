@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+from cryptography.hazmat.primitives import serialization
 
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
-from sdk.keys.org_keys import load_or_create_keypair
 
 PROTOCOL_VERSION = "AAR-MCP-2.0"
 TOOL_CALL_METHODS = {"tools/call", "call_tool"}
@@ -60,6 +60,11 @@ def merkle_root(lines: list[str]) -> str | None:
 def load_policy(policy_path: str) -> dict[str, Any]:
     with open(policy_path, "r", encoding="utf-8") as fh:
         return yaml.safe_load(fh) or {}
+
+
+def load_private_key(path: str):
+    with open(path, "rb") as fh:
+        return serialization.load_pem_private_key(fh.read(), password=None)
 
 
 def sanitize_args(args: Any) -> dict[str, Any]:
@@ -216,7 +221,7 @@ def main() -> int:
     try:
         journal = JSONLJournal(JournalConfig(path=args.journal))
         state = load_journal_state(args.journal)
-        private_key = load_or_create_keypair(args.key).priv
+        private_key = load_private_key(args.key)
     except Exception as exc:
         print(f"Failed to initialize evidence engine: {exc}", file=sys.stderr)
         return 1

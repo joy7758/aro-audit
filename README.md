@@ -87,6 +87,7 @@ Expected behavior:
 
 - Original journal: `VERIFY_OK: full chain valid`
 - Tampered journal: verification fails (for example `Merkle mismatch`)
+- Demo key mode: private key stays in memory by default (no `private.pem` is written)
 
 预期结果：原始日志验证通过；篡改后日志验证失败。
 
@@ -109,6 +110,8 @@ Core specification is frozen as Release Candidate:
 - `sdk/anchor/`: external anchoring helpers (Git anchor)
 - `demo/high_risk_authority/`: self-contained high-risk demo
 - `docs/spec/`: protocol specification
+
+Note: `mcp-aar` requires an existing Ed25519 private key path via `--key`; it will not auto-generate private keys on disk.
 
 ---
 
