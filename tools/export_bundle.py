@@ -18,9 +18,11 @@ def main():
         print("public.pem not found")
         sys.exit(1)
 
-    with zipfile.ZipFile(out, 'w') as z:
+    with zipfile.ZipFile(out, "w") as z:
         z.write(journal, "journal.jsonl")
+        # Keep both names for cross-version verifier compatibility.
         z.write(pubkey, "public.pem")
+        z.write(pubkey, "org_pubkey_ed25519.pem")
 
     print("Bundle created:", out)
 
