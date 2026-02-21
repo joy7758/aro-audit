@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 joy7758 contributors
 from __future__ import annotations
 
 import os, sys, json, hashlib

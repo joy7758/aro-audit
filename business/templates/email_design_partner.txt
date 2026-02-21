@@ -1,0 +1,22 @@
+Subject: Pilot proposal - independently verifiable AI agent audit evidence
+
+Hello <Name>,
+
+I maintain `aro-audit` (AAR/ALC v1.0), an open-source evidence layer that turns
+agent/tool invocation logs into third-party verifiable audit artifacts.
+
+What it provides:
+- Append-only journal (`journal.jsonl`)
+- Checkpoint sealing and signature proof
+- Public-key-only verification
+- Deliverable audit packet (`audit_packet.zip`)
+
+I would like to propose a 4-6 week design-partner pilot:
+- Pick one critical workflow
+- Produce verifiable evidence artifacts
+- Align acceptance criteria with your compliance/audit process
+
+If useful, I can share a 1-minute reproducible demo package and verification commands.
+
+Best regards,
+<Your Name>

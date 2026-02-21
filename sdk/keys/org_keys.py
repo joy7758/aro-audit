@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 joy7758 contributors
 from __future__ import annotations
 import os
 from dataclasses import dataclass

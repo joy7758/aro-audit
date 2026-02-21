@@ -1,7 +1,7 @@
 # aro-audit
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
-[![License](https://img.shields.io/badge/License-MIT-0E8A16)](#license)
+[![License](https://img.shields.io/badge/License-MIT-0E8A16)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-P0%20Remediated-0A7D32)](README.md)
 
 > AAR/ALC v1.0 baseline for production-grade AI agent auditing.
@@ -101,6 +101,13 @@ Top-level submission bundle:
 
 - `release/aro_submission_bundle.zip`
 
+## Business Assets | 商业化资产
+
+- `business/README.md`
+- `business/templates/PR_template.md`
+- `business/templates/email_design_partner.txt`
+- `business/templates/release_checklist.md`
+
 ## Security Boundary (P0) | 安全边界（P0）
 
 - Verification is public-key-only.
@@ -144,6 +151,33 @@ No. Verification uses public key only.
 
 No. Deliverable packets are built without private keys.  
 不会。交付包已排除私钥材料。
+
+## Legal and IP | 法律与知识产权
+
+- License: `MIT` (`LICENSE`)
+- Copyright: `COPYRIGHT`
+- Notice and third-party marks: `NOTICE`
+- Project trademark usage: `TRADEMARK_POLICY.md`
+- Contribution IP rules: `CONTRIBUTING.md`
+- IP/license commercialization boundary: `docs/IP_AND_LICENSE_STRATEGY.md`
+
+Copyright strengthening for this repository:
+
+- All source contributions are licensed under MIT.
+- Third-party trademarks are identified in `NOTICE` and are not claimed.
+- Contributors must only submit code and content they have rights to use.
+
+Run legal baseline checks:
+
+```bash
+tools/check_legal.sh
+```
+
+本仓库已强化版权与知识产权治理：
+
+- 统一采用 MIT 许可并落地到 `LICENSE`。
+- 第三方商标归属与使用边界在 `NOTICE` 中明确。
+- 贡献者需保证提交内容具备合法权利，规则见 `CONTRIBUTING.md`。
 
 ## License
 
