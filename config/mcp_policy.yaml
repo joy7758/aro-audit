@@ -1,8 +1,9 @@
 high_risk_tools:
-  - write_file
-  - delete_resource
-  - transfer_funds
-
+- write_file
+- delete_resource
+- transfer_funds
 fail_closed: true
 auto_checkpoint: true
 receipt_placeholder: true
+policy:
+  dependency_mode: strict

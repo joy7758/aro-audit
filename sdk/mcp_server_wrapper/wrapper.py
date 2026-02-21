@@ -13,6 +13,7 @@ import yaml
 from cryptography.hazmat.primitives import serialization
 
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
+from sdk.mcp_server_wrapper.dependency_guard import check_dependency
 
 PROTOCOL_VERSION = "AAR-MCP-2.0"
 TOOL_CALL_METHODS = {"tools/call", "call_tool"}
@@ -217,6 +218,10 @@ def main() -> int:
     high_risk_tools = set(policy.get("high_risk_tools", []))
     auto_checkpoint = bool(policy.get("auto_checkpoint", True))
     fail_closed = bool(policy.get("fail_closed", True))
+    policy_section = policy.get("policy", {}) if isinstance(policy.get("policy", {}), dict) else {}
+    dependency_mode = str(policy_section.get("dependency_mode", policy.get("dependency_mode", "soft"))).lower()
+    if dependency_mode not in {"soft", "strict"}:
+        dependency_mode = "soft"
 
     try:
         journal = JSONLJournal(JournalConfig(path=args.journal))
@@ -251,6 +256,18 @@ def main() -> int:
                 tool_call = extract_tool_call(message)
                 if tool_call:
                     tool_name, tool_args = tool_call
+                    risk_level = "high" if tool_name in high_risk_tools else "low"
+                    incoming_json = tool_args if isinstance(tool_args, dict) else {}
+                    allowed, reason = check_dependency(
+                        incoming_json,
+                        journal_path=args.journal,
+                        risk_level=risk_level,
+                        mode=dependency_mode,
+                    )
+                    if (not allowed) and fail_closed:
+                        send_error_response(req_id, f"Dependency guard failed: {reason}")
+                        continue
+
                     if tool_name in high_risk_tools:
                         try:
                             write_aar(journal, state, tool_name, tool_args)
