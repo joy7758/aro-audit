@@ -322,3 +322,23 @@ Profiles MUST NOT alter core structural rules.
 ---
 
 End of Specification.
+
+
+---
+
+# 2. Normative Requirements (Core Freeze)
+
+## 2.1 Record Types
+
+An AAR-MCP-2.0 journal MUST contain only the following record types:
+
+- `statement`
+- `checkpoint`
+
+The following aliases MAY be accepted for backward compatibility:
+
+- `AAR` (equivalent to `statement`)
+- `CHECKPOINT` (equivalent to `checkpoint`)
+
+Any other `_record_type` value MUST cause verification failure.
+
