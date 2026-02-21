@@ -1,3 +1,6 @@
+LICENSE
+NOTICE
+README.md
 pyproject.toml
 setup.cfg
 aro_audit.egg-info/PKG-INFO
@@ -16,5 +19,7 @@ sdk/journal/__init__.py
 sdk/journal/jsonl_journal.py
 sdk/keys/__init__.py
 sdk/keys/org_keys.py
+sdk/mcp_enforcer/__init__.py
+sdk/mcp_enforcer/enforcer.py
 sdk/verify/__init__.py
 sdk/verify/verify.py

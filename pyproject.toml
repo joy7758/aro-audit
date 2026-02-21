@@ -26,4 +26,5 @@ dependencies = [
 ]
 
 [project.scripts]
+mcp-aar = "sdk.mcp_server_wrapper.wrapper:main"
 aro = "sdk.cli.aro:app"
