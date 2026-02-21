@@ -1,0 +1,2 @@
+{"version":"AAR-MCP-2.0","type":"AAR","seq":0,"tool":"transfer_funds","args":{"from":"corp_account","to":"vendor_account","amount":100000},"timestamp":"2026-02-21T16:12:21.467569+00:00"}
+{"version":"AAR-MCP-2.0","type":"CHECKPOINT","range":[0,0],"merkle_root":"3197f5b13d39b49ecc37a397ef29f15126d0c5e70f318d013405ba5e441a74cf","prev_checkpoint_hash":null,"timestamp":"2026-02-21T16:12:21.467781+00:00","signature":"501ae3229cabce19b484c2015fc4285e5fd6cb46f9ec0610bd6d8c7f9fed583c973f22ad007112997d6a520b4ff9b21ee016e393d842a5c4092aec0cd619ad06"}

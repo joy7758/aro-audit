@@ -1,0 +1,19 @@
+===============================
+ AAR-MCP-2.0 High Risk Demo
+===============================
+
+1️⃣ Generating high-risk action...
+High-risk action recorded.
+Amount transferred: 100000
+
+2️⃣ Verifying integrity...
+VERIFY_OK: full chain valid
+
+3️⃣ Simulating tampering...
+
+4️⃣ Verifying tampered journal...
+Merkle mismatch
+
+===============================
+ Demo complete
+===============================
