@@ -98,6 +98,7 @@ Core specification is frozen as Release Candidate:
 
 - Spec: `docs/spec/AAR-MCP-2.0-Core-Spec.md`
 - Tag: `spec/v2.0.0-rc1`
+- Audit remediation sync: `docs/AUDIT_REMEDIATION_2026-02-21.md`
 
 ---
 
@@ -141,4 +142,3 @@ We are actively discussing the protocol design:
   https://github.com/joy7758/aro-audit/discussions/2
 
 Structured critique is welcome.
-

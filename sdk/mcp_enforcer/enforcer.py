@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
 
 HIGH_RISK_TOOLS = {
@@ -19,7 +19,7 @@ def enforce_and_execute(tool_name: str, tool_args: dict, tool_callable):
             "type": "AAR",
             "tool": tool_name,
             "args": tool_args,
-            "timestamp": datetime.utcnow().isoformat() + "Z"
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z")
         }
 
         try:

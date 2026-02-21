@@ -1,6 +1,10 @@
 .venv/
 demo/out/*.pem
 demo/out/*.zip
+demo/out/*.jsonl
+demo/high_risk_authority/*.pem
+demo/high_risk_authority/*.jsonl
+anchor.log
 __pycache__/
 *.pyc
 .DS_Store

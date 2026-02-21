@@ -1,5 +1,6 @@
 import json
 import hashlib
+import os
 from datetime import datetime, timezone
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
@@ -10,6 +11,9 @@ PUBKEY_PATH = "public.pem"
 
 def sha256_hex(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+def canonical_json(obj) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 def merkle_root(leaves):
     nodes = [sha256_hex(l.encode()) for l in leaves]
@@ -35,6 +39,7 @@ def generate_keys():
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()
         ))
+    os.chmod(PRIVKEY_PATH, 0o600)
 
     with open(PUBKEY_PATH, "wb") as f:
         f.write(public_key.public_bytes(
@@ -65,8 +70,8 @@ def main():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    aar_line = json.dumps(aar, separators=(",", ":"))
-    with open(JOURNAL_PATH, "a") as f:
+    aar_line = canonical_json(aar)
+    with open(JOURNAL_PATH, "a", encoding="utf-8") as f:
         f.write(aar_line + "\n")
 
     root = merkle_root([aar_line])
@@ -80,12 +85,12 @@ def main():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
-    payload = json.dumps(checkpoint, sort_keys=True, separators=(",", ":")).encode()
+    payload = canonical_json(checkpoint).encode()
     signature = private_key.sign(payload).hex()
     checkpoint["signature"] = signature
 
-    with open(JOURNAL_PATH, "a") as f:
-        f.write(json.dumps(checkpoint, separators=(",", ":")) + "\n")
+    with open(JOURNAL_PATH, "a", encoding="utf-8") as f:
+        f.write(canonical_json(checkpoint) + "\n")
 
     print("High-risk action recorded.")
     print("Amount transferred: 100000")

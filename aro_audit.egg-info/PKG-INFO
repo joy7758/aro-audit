@@ -37,6 +37,7 @@ Requires-Dist: cryptography
 Requires-Dist: jsonschema
 Requires-Dist: duckdb
 Requires-Dist: orjson
+Requires-Dist: pyyaml
 Requires-Dist: typer
 Requires-Dist: rfc8785
 Dynamic: license-file

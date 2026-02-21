@@ -1,2 +1,0 @@
-{"version": "AAR-MCP-1.1", "type": "AAR", "tool": "write_file", "args": {"path": "x2.txt", "content": "abc"}, "timestamp": "2026-02-21T15:17:21.231462+00:00"}
-{"version": "AAR-MCP-2.0", "type": "CHECKPOINT", "range": [1, 1], "merkle_root": "f8b203c5305ee28812a4a0138b863e16a47f59c006d7c11f9d2bb56e7265dbe5", "prev_checkpoint_hash": null, "timestamp": "2026-02-21T15:32:40.492216+00:00", "signature": "85f2a9eacd744954930cd3992bd40c2803234336c76ed5d108f92d4233d2da86dd3eefcc3f2a514f981f1c4d95c6a68983c9ed6ed13914d69d2ecd861a74640e"}
