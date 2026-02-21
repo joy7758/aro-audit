@@ -153,3 +153,7 @@ We are actively discussing the protocol design:
   https://github.com/joy7758/aro-audit/discussions/2
 
 Structured critique is welcome.
+
+## RC1 Review入口
+- Review Guidelines（请按模板提意见）：见 Discussions
+- Issue Tracker（集中收口 Spec/Interop/Security）：见 Discussions

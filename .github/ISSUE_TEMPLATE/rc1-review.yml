@@ -1,0 +1,41 @@
+name: RC1 Review (AAR-MCP-2.0)
+description: 用规范语言提意见（可进入 Conformance 的那种）
+title: "[RC1-REVIEW] <一句话概括>"
+labels: ["rc1-review"]
+body:
+  - type: input
+    id: spec_ref
+    attributes:
+      label: 规范引用位置
+      description: 填章节/小节/行号/链接（必须）
+      placeholder: "例如：docs/spec/AAR-MCP-2.0-Core-Spec.md#2.2 或 L120-L150"
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      options:
+        - Ambiguity（歧义）
+        - Missing Requirement（缺约束）
+        - Interop Risk（互操作风险）
+        - Security Concern（安全/绕过）
+        - Conformance Gap（向量/CI缺口）
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议的“规范级改写”
+      description: 请给出最少一句可以直接写进 spec 的文字
+      placeholder: "把原句改成：……（强制/禁止/必须等硬词）"
+    validations:
+      required: true
+  - type: textarea
+    id: vectors
+    attributes:
+      label: 是否需要新增/修改 Conformance 向量
+      description: 如果需要，贴最小 base/attack JSONL（可脱敏）
+      placeholder: "base:\n...\nattack:\n..."
+    validations:
+      required: false
