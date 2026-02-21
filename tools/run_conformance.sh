@@ -16,13 +16,13 @@ fi
 python -m pip install -e .
 
 echo "== base must pass =="
-python sdk/verify/verify.py spec/test_vectors/boundary_base_v1.jsonl demo/out/org_pubkey_ed25519.pem
+python sdk/verify/verify.py spec/test_vectors/boundary_base_v1.jsonl spec/test_vectors/keys/test_pubkey.pem
 
 echo "== attestations-only mutation must still pass =="
-python sdk/verify/verify.py spec/test_vectors/boundary_attack_attestations_only.jsonl demo/out/org_pubkey_ed25519.pem
+python sdk/verify/verify.py spec/test_vectors/boundary_attack_attestations_only.jsonl spec/test_vectors/keys/test_pubkey.pem
 
 echo "== predicate mutation must fail =="
-if python sdk/verify/verify.py spec/test_vectors/boundary_attack_predicate.jsonl demo/out/org_pubkey_ed25519.pem; then
+if python sdk/verify/verify.py spec/test_vectors/boundary_attack_predicate.jsonl spec/test_vectors/keys/test_pubkey.pem; then
   echo "ERROR: predicate mutation unexpectedly passed (boundary broken)"
   exit 2
 else
