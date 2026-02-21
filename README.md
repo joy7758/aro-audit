@@ -59,6 +59,14 @@ Out of scope:
 
 ---
 
+## Quickstart (30s)
+
+```bash
+bash quickstart/run.sh
+```
+
+成功标志：看到 `VERIFY_OK: full chain valid`，并且篡改样本会被拒绝（`Merkle mismatch` 或等价失败）。
+
 ## 30-Second Demo | 30 秒演示
 
 ```text

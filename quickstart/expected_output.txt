@@ -1,0 +1,13 @@
+期望看到类似输出（内容会略有不同）：
+
+=== Quickstart: AAR-MCP-2.0 30s Demo ===
+[1/4] 生成演示日志（AAR + CHECKPOINT）与公钥
+[OK] journal: quickstart/out/journal.jsonl
+[OK] pubkey: quickstart/out/public.pem
+[2/4] 正常样本：全链校验
+VERIFY_OK: full chain valid
+[3/4] 生成篡改样本（改金额/改内容）
+[4/4] 篡改样本：应当失败（Merkle mismatch / digest mismatch / signature invalid）
+VERIFY_FAIL: …
+[OK] 篡改样本被拒绝（符合预期）
+=== DONE: Quickstart OK ===

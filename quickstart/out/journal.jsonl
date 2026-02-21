@@ -1,0 +1,2 @@
+{"args":{"amount":100000,"from":"corp_account","to":"vendor_account"},"seq":0,"timestamp":"2026-02-21T19:58:10.407272+00:00","tool":"transfer_funds","type":"AAR","version":"AAR-MCP-2.0"}
+{"merkle_root":"eaa4e063fcc66bc6bd049fc24f6745020c67f043323e407b1ad28a8dea93225a","prev_checkpoint_hash":null,"range":[0,0],"signature":"1a4cfaae4968f466058dddf44fafb9e9d44ebd056297014809ae5ad6303073b6e19f49228cf0ada0e6d0d876bef123ec7570b1070669fce5ab5c719269d72d0f","timestamp":"2026-02-21T19:58:10.407507+00:00","type":"CHECKPOINT","version":"AAR-MCP-2.0"}
