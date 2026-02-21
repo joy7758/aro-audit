@@ -11,3 +11,4 @@ dependency:
   default: soft
   tools:
     write_file: strict
+  hard_gate: true
