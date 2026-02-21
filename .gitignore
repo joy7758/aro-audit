@@ -1,4 +1,6 @@
 .venv/
+demo/out/*.pem
+demo/out/*.zip
 __pycache__/
 *.pyc
 .DS_Store

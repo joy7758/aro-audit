@@ -31,7 +31,7 @@ aro gen-demo
 3) 复核（第三方独立验证）
 aro verify
 # 或：
-python3 sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_subkey_ed25519.pem
+python3 sdk/verify/verify.py demo/out/journal.jsonl demo/out/org_pubkey_ed25519.pem
 4) 导出 Manifest（合规交差包）
 aro export
 # 产物：demo/out/AAR-Manifest.json
@@ -41,13 +41,13 @@ demo/out/journal.jsonl：事实源（statement + checkpoint）
 
 demo/out/AAR-Manifest.json：导出摘要（含复核命令、checkpoint 汇总）
 
-demo/out/audit_packet.zip：审计包（journal + manifest + verify.sh + README）
+demo/out/audit_packet.zip：审计包（journal + manifest + verify.sh + README + 公钥）
 
 docs/preprint_arxiv.pdf：3页论文（可投递）
 
 release/aro_submission_bundle.zip：投递包（论文 + 审计包 + 规范）
 
-⚠️ 安全提示：demo/out/org_subkey_ed25519.pem 是 demo 私钥，仅用于复现。生产环境不要外发私钥。
+⚠️ 安全提示：验证只需 `demo/out/org_pubkey_ed25519.pem`。demo 私钥仅用于本地签名，不进入交付包。
 
 目录结构 / Repo Layout
 sdk/

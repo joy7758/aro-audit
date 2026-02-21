@@ -24,7 +24,7 @@ def load_jsonl(path: str) -> List[Dict[str, Any]]:
 
 def main() -> int:
     journal_path = os.environ.get("JOURNAL", "demo/out/journal.jsonl")
-    key_path = os.environ.get("KEY", "demo/out/org_subkey_ed25519.pem")
+    key_path = os.environ.get("KEY", "demo/out/org_pubkey_ed25519.pem")
     out_path = os.environ.get("OUT", "demo/out/AAR-Manifest.json")
 
     rows = load_jsonl(journal_path)
@@ -49,7 +49,7 @@ def main() -> int:
         "artifacts": {
             "journal_path": journal_path,
             "journal_sha256": sha256_file(journal_path),
-            "org_subkey_path": key_path,
+            "org_pubkey_path": key_path,
         },
         "checkpoints": [
             {

@@ -42,11 +42,11 @@ def merkle_root(digests: List[str]) -> str:
         level = nxt
     return "sha256:" + level[0].hex()
 
-def load_pubkey_from_priv(path: str) -> Ed25519PublicKey:
+def load_pubkey(path: str) -> Ed25519PublicKey:
     data = open(path, "rb").read()
-    priv = serialization.load_pem_private_key(data, password=None)
-    pub = priv.public_key()
-    assert isinstance(pub, Ed25519PublicKey)
+    pub = serialization.load_pem_public_key(data)
+    if not isinstance(pub, Ed25519PublicKey):
+        raise TypeError("expected Ed25519 public key")
     return pub
 
 def checkpoint_message(start: int, end: int, root: str, store_fp: str, key_fp: str) -> bytes:
@@ -65,12 +65,15 @@ def fail(msg: str) -> int:
 
 def main() -> int:
     if len(sys.argv) < 3:
-        print("usage: python sdk/verify/verify.py <journal.jsonl> <org_subkey_ed25519.pem>")
+        print("usage: python sdk/verify/verify.py <journal.jsonl> <org_subkey_pub.pem>")
         return 2
 
     path = sys.argv[1]
     key_path = sys.argv[2]
-    pub = load_pubkey_from_priv(key_path)
+    try:
+        pub = load_pubkey(key_path)
+    except Exception as e:
+        return fail(f"cannot load public key {key_path}: {e}")
 
     prev: Optional[str] = None
     seq_expected = 0
