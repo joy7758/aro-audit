@@ -19,28 +19,32 @@ def get_latest_checkpoint_root(journal_path: str):
                 last_root = obj.get("merkle_root")
     return last_root
 
-def check_dependency(incoming: dict, journal_path: str, risk_level: str, mode: str = "soft"):
-    # only high-risk enforced
+
+def resolve_mode(tool_name: str, policy: dict):
+    dep = policy.get("dependency", {})
+    default_mode = dep.get("default", "soft")
+    tool_modes = dep.get("tools", {})
+    return tool_modes.get(tool_name, default_mode)
+
+
+def check_dependency(incoming: dict, journal_path: str, risk_level: str, tool_name: str, policy: dict):
     if risk_level != "high":
         return True, None
 
-    mode = (mode or "soft").lower()
+    mode = resolve_mode(tool_name, policy)
     required = incoming.get("required_checkpoint_root")
     latest = get_latest_checkpoint_root(journal_path)
 
-    # no checkpoint yet
     if latest is None:
         if mode == "strict":
             return False, "No previous checkpoint found (strict-deny)."
         return True, "No previous checkpoint found (soft-allow)."
 
-    # missing required root
     if required is None:
         if mode == "strict":
             return False, "Missing required_checkpoint_root (strict-deny)."
         return True, "Missing required_checkpoint_root (soft-allow)."
 
-    # mismatch
     if required != latest:
         return False, f"Checkpoint root mismatch. expected={latest}, got={required}"
 

@@ -7,3 +7,7 @@ auto_checkpoint: true
 receipt_placeholder: true
 policy:
   dependency_mode: strict
+dependency:
+  default: soft
+  tools:
+    write_file: strict

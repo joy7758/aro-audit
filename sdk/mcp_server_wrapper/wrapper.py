@@ -218,10 +218,6 @@ def main() -> int:
     high_risk_tools = set(policy.get("high_risk_tools", []))
     auto_checkpoint = bool(policy.get("auto_checkpoint", True))
     fail_closed = bool(policy.get("fail_closed", True))
-    policy_section = policy.get("policy", {}) if isinstance(policy.get("policy", {}), dict) else {}
-    dependency_mode = str(policy_section.get("dependency_mode", policy.get("dependency_mode", "soft"))).lower()
-    if dependency_mode not in {"soft", "strict"}:
-        dependency_mode = "soft"
 
     try:
         journal = JSONLJournal(JournalConfig(path=args.journal))
@@ -262,7 +258,8 @@ def main() -> int:
                         incoming_json,
                         journal_path=args.journal,
                         risk_level=risk_level,
-                        mode=dependency_mode,
+                        tool_name=tool_name,
+                        policy=policy,
                     )
                     if (not allowed) and fail_closed:
                         send_error_response(req_id, f"Dependency guard failed: {reason}")
