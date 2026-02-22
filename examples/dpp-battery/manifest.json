@@ -1,0 +1,54 @@
+{
+  "aro_audit_manifest_version": "1.0",
+  "profile_handle": "21.T11966/aro-audit-profile-v1",
+  "expected_use": "Audit-ready lifecycle integrity for a DPP-like object (demo).",
+  "targets": [
+    {
+      "path": "dpp.json",
+      "media_type": "application/json"
+    }
+  ],
+  "journal": {
+    "path": "journal.jsonl",
+    "format": "jsonl",
+    "append_only": true
+  },
+  "audit_policy": {
+    "hash_algorithm": "sha256",
+    "canonical_json": {
+      "sort_keys": true,
+      "separators": [
+        ",",
+        ":"
+      ],
+      "ensure_ascii": false
+    },
+    "journal_entry_hash_chain": "sha256(prev_entry_hash + canonical_entry_json)",
+    "target_object_hash": "sha256(raw_bytes_of_target_file)",
+    "journal_file_hash": "sha256(raw_bytes_of_journal_file)",
+    "required_fields_in_entry": [
+      "seq",
+      "timestamp",
+      "event",
+      "target_path",
+      "target_sha256",
+      "prev_entry_hash",
+      "entry_hash"
+    ]
+  },
+  "identity_anchor": {
+    "public_key_fingerprint": "ed25519-demo-key-fingerprint",
+    "note": "Signature is optional in this demo; fingerprint is provided as an anchor reference."
+  },
+  "integrity": {
+    "target_sha256": "0c77a804a896a2d7ffd270d8197bc800b03744ca3011ad30513d08fe688dc79e",
+    "journal_sha256": "67537c7d4091d5deb25f478c5411e918fec8e601c85c2590ad0cd0ddc37ce037",
+    "last_entry_hash": "a557b53c7e8d84781601cae626448c68c838402d6509729870aeeeb5256e51cb"
+  },
+  "provenance": {
+    "created_by": "Bin Zhang",
+    "orcid": "0009-0002-8861-1481",
+    "created_at": "2026-02-22T03:30:43Z",
+    "last_modified_at": "2026-02-22T03:30:43Z"
+  }
+}
