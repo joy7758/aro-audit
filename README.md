@@ -1,5 +1,41 @@
 # ARO Audit Profile
 
+<!-- SEARCH_VISIBILITY_BEGIN -->
+## Discoverability Snapshot / 检索曝光摘要
+
+- Standard ID / 标准编号: `RR-ARO`
+- Repository / 仓库名: `aro-audit`
+
+### EN Summary / 英文摘要
+Evidence-layer protocol for high-authority AI action audit and replay verification.
+
+### CN Summary / 中文摘要
+用于高权限AI动作审计与重放验证的证据层协议。
+
+### SEO Keywords / 检索关键词
+`audit-receipt`, `ai-governance`, `evidence-layer`, `merkle`, `verification`
+
+### Suggested Search Phrases (EN)
+- aro-audit RR-ARO open standard
+- aro-audit audit-receipt ai-governance github
+- RR-ARO audit-receipt reference implementation
+
+### 建议检索短语（中文）
+- aro-audit RR-ARO 标准 规范
+- aro-audit audit-receipt ai-governance 仓库
+- RR-ARO 参考实现 红岩 宪章
+
+### Quick Links / 快速入口
+- Governance Hub / 总入口: https://github.com/joy7758/RedRock-Constitution
+- Standards Registry / 标准注册表: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro
+- Repos Index / 仓库索引: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/REPOS_INDEX_CN_EN.md
+- Ecosystem Graph / 生态关系图: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/ECOSYSTEM_GRAPH_CN_EN.md
+- Onepager / 一页纸: (pending)
+- Citation / 引用元数据: `CITATION.cff`
+- Security Policy / 安全策略: `SECURITY.md`
+- Machine-readable / 机器可读: `machine-readable/repository.json`
+<!-- SEARCH_VISIBILITY_END -->
+
 ARO Audit Profile defines an evidence-layer protocol for high-authority AI actions.
 Operationally, it functions as an **immune system** for agent execution: it continuously records, seals, and verifies action traces, so unauthorized mutation is detected during audit and replay.
 
