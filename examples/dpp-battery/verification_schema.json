@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "targets_sha256": {
+      "type": "object"
+    },
+    "journal_sha256": {
+      "type": "string"
+    },
+    "last_entry_hash": {
+      "type": "string"
+    },
+    "badge_fingerprint": {
+      "type": "string"
+    }
+  }
+}
