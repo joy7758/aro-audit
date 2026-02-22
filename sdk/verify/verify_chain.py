@@ -4,9 +4,11 @@ import re
 import sys
 from typing import Any
 
-import rfc8785
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
+from sdk.canonical.jcs import dumps as jcs_dumps
 
 VERSION_RE = re.compile(r"^AAR-MCP-(\d+)\.(\d+)$")
 SUPPORTED_MAJOR = 2
@@ -14,7 +16,7 @@ SUPPORTED_MAJOR = 2
 
 def canonical_json_bytes(obj: Any) -> bytes:
     # RFC8785 canonicalization for stable digest/signature input across implementations.
-    return rfc8785.dumps(obj)
+    return jcs_dumps(obj)
 
 
 def sha256_hex(data: bytes) -> str:
@@ -57,27 +59,36 @@ def fail(msg: str) -> int:
 def verify_chain(path: str, pubkey_path: str) -> int:
     with open(pubkey_path, "rb") as f:
         public_key = serialization.load_pem_public_key(f.read())
+    if not isinstance(public_key, Ed25519PublicKey):
+        return fail("Public key must be Ed25519")
 
     with open(path, "r", encoding="utf-8") as f:
-        raw_lines = [line.rstrip("\n") for line in f if line.strip()]
+        raw_lines = [(lineno, line.rstrip("\n")) for lineno, line in enumerate(f, start=1) if line.strip()]
 
     if not raw_lines:
         return fail("Empty journal")
 
     aars_by_seq: dict[int, dict[str, Any]] = {}
     checkpoints: list[tuple[int, dict[str, Any]]] = []
-    for line_index, raw in enumerate(raw_lines):
-        obj = json.loads(raw)
+    for lineno, raw in raw_lines:
+        try:
+            obj = json.loads(raw)
+        except Exception as exc:
+            return fail(f"Invalid JSON at line {lineno}: {exc}")
         record_type = obj.get("type")
         if not check_version(obj.get("version")):
             return fail("Unsupported protocol major version")
         if record_type == "AAR":
             seq = obj.get("seq")
             if not isinstance(seq, int):
-                return fail("Range discontinuity")
-            aars_by_seq[seq] = {"raw": raw, "line_index": line_index, "obj": obj}
+                return fail(f"Invalid AAR seq at line {lineno}")
+            if seq in aars_by_seq:
+                return fail(f"Duplicate AAR seq {seq} at line {lineno}")
+            aars_by_seq[seq] = {"raw": raw, "lineno": lineno, "obj": obj}
         elif record_type == "CHECKPOINT":
-            checkpoints.append((line_index, obj))
+            checkpoints.append((lineno, obj))
+        else:
+            return fail(f"Unknown record type at line {lineno}: {record_type!r}")
 
     if not aars_by_seq:
         return fail("No AAR found")
@@ -111,7 +122,7 @@ def verify_chain(path: str, pubkey_path: str) -> int:
             entry = aars_by_seq.get(seq)
             if entry is None:
                 return fail("Range mismatch")
-            if entry["line_index"] >= cp_line_index:
+            if entry["lineno"] >= cp_line_index:
                 return fail("Range mismatch")
             segment.append(entry["raw"])
 
@@ -134,7 +145,7 @@ def verify_chain(path: str, pubkey_path: str) -> int:
         next_expected_start = end + 1
 
     if next_expected_start != len(ordered_seqs):
-        return fail("No CHECKPOINT found")
+        return fail("Last AAR range not covered by checkpoints")
 
     print("VERIFY_OK: full chain valid")
     return 0

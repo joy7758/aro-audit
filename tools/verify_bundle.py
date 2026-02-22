@@ -12,13 +12,15 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
+from sdk.canonical.jcs import dumps as jcs_dumps
+
 
 def sha256_hex(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
 def canonical_json_bytes(obj: Any) -> bytes:
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return jcs_dumps(obj)
 
 
 def decode_signature(sig: str) -> bytes:

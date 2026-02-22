@@ -10,3 +10,4 @@ __pycache__/
 .DS_Store
 .local_backup/
 demo/out_bundle/
+aro_audit.egg-info/

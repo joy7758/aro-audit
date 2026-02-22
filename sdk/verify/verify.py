@@ -25,16 +25,16 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-import rfc8785
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.hazmat.primitives import serialization
+from sdk.canonical.jcs import dumps as jcs_dumps
 from sdk.keys.org_keys import verify as verify_sig
 
 def sha256_hex(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 def jcs_bytes(obj: Dict[str, Any]) -> bytes:
-    return rfc8785.dumps(obj)
+    return jcs_dumps(obj)
 
 def compute_digest(statement: Dict[str, Any]) -> str:
     s = dict(statement)

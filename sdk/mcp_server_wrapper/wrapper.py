@@ -12,6 +12,7 @@ from typing import Any
 import yaml
 from cryptography.hazmat.primitives import serialization
 
+from sdk.canonical.jcs import dumps as jcs_dumps
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
 from sdk.mcp_server_wrapper.dependency_guard import check_dependency, get_latest_checkpoint_root
 
@@ -28,8 +29,12 @@ class JournalState:
     pending_aar_lines: list[str] = field(default_factory=list)
 
 
+def canonical_json_bytes(obj: Any) -> bytes:
+    return jcs_dumps(obj)
+
+
 def canonical_json(obj: Any) -> str:
-    return json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return canonical_json_bytes(obj).decode("utf-8")
 
 
 def sha256_hex(data: bytes) -> str:
@@ -37,11 +42,11 @@ def sha256_hex(data: bytes) -> str:
 
 
 def hash_json(obj: Any) -> str:
-    return "sha256:" + sha256_hex(canonical_json(obj).encode("utf-8"))
+    return "sha256:" + sha256_hex(canonical_json_bytes(obj))
 
 
 def checkpoint_hash(checkpoint_obj: dict[str, Any]) -> str:
-    return "sha256:" + sha256_hex(canonical_json(checkpoint_obj).encode("utf-8"))
+    return "sha256:" + sha256_hex(canonical_json_bytes(checkpoint_obj))
 
 
 def merkle_root(lines: list[str]) -> str | None:
@@ -170,7 +175,7 @@ def write_checkpoint_segmented(
         "prev_checkpoint_hash": state.prev_checkpoint_hash,
         "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
     }
-    signature = private_key.sign(canonical_json(payload).encode("utf-8")).hex()
+    signature = private_key.sign(canonical_json_bytes(payload)).hex()
     checkpoint = dict(payload)
     checkpoint["signature"] = signature
 

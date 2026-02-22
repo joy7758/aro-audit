@@ -1,9 +1,10 @@
-import json
 import os
 import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from sdk.canonical.jcs import dumps as jcs_dumps
 
 
 @dataclass
@@ -22,7 +23,7 @@ class JSONLJournal:
 
     def append_statement(self, obj: dict[str, Any]) -> str:
         # Canonical formatting keeps line-level hashes stable across modules.
-        line = json.dumps(obj, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        line = jcs_dumps(obj).decode("utf-8")
         with self._lock:
             self._fh.write(line + "\n")
         return line

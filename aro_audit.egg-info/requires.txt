@@ -1,7 +1,0 @@
-cryptography
-jsonschema
-duckdb
-orjson
-pyyaml
-typer
-rfc8785

@@ -1,3 +1,0 @@
-[console_scripts]
-aro = sdk.cli.aro:app
-mcp-aar = sdk.mcp_server_wrapper.wrapper:main

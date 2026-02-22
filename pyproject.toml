@@ -18,12 +18,21 @@ classifiers = [
 ]
 dependencies = [
   "cryptography",
-  "jsonschema",
-  "duckdb",
-  "orjson",
   "pyyaml",
-  "typer",
-  "rfc8785",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "coverage[toml]",
+]
+lint = [
+  "ruff",
+  "mypy",
+]
+security = [
+  "pip-audit",
+  "bandit",
 ]
 
 [project.scripts]

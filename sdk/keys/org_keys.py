@@ -3,7 +3,6 @@
 from __future__ import annotations
 import os
 from dataclasses import dataclass
-from typing import Optional
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.hazmat.primitives import serialization
@@ -16,9 +15,11 @@ class KeyPair:
 def load_or_create_keypair(path: str) -> KeyPair:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     if os.path.exists(path):
-        data = open(path, "rb").read()
+        with open(path, "rb") as f:
+            data = f.read()
         priv = serialization.load_pem_private_key(data, password=None)
-        assert isinstance(priv, Ed25519PrivateKey)
+        if not isinstance(priv, Ed25519PrivateKey):
+            raise TypeError(f"expected Ed25519 private key: {path}")
         return KeyPair(priv=priv, pub=priv.public_key())
 
     priv = Ed25519PrivateKey.generate()
@@ -29,6 +30,11 @@ def load_or_create_keypair(path: str) -> KeyPair:
     )
     with open(path, "wb") as f:
         f.write(pem)
+    try:
+        os.chmod(path, 0o600)
+    except OSError:
+        # Best-effort on filesystems that don't support chmod semantics.
+        pass
     return KeyPair(priv=priv, pub=priv.public_key())
 
 def pubkey_fingerprint(pub: Ed25519PublicKey) -> str:

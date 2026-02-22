@@ -18,15 +18,21 @@ for f in "${required_files[@]}"; do
 
 missing_headers=0
 while IFS= read -r py; do
-  if ! rg -q "SPDX-License-Identifier: MIT" "$py"; then
+  if ! grep -q "SPDX-License-Identifier: MIT" "$py"; then
     echo "MISSING SPDX: $py"
     missing_headers=1
   fi
-  if ! rg -q "Copyright \(c\) 2026 joy7758 contributors" "$py"; then
+  if ! grep -q "Copyright (c) 2026 joy7758 contributors" "$py"; then
     echo "MISSING COPYRIGHT HEADER: $py"
     missing_headers=1
   fi
- done < <(rg --files -g '*.py')
+done < <(
+  find . -type f -name '*.py' \
+    -not -path './.venv/*' \
+    -not -path './vendor/*' \
+    -not -path './.git/*' \
+    -not -path './quickstart/out/*'
+)
 
 if [[ $missing_headers -ne 0 ]]; then
   exit 1
