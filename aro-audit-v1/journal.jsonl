@@ -1,0 +1,10 @@
+{"seq":1,"event":"init"}
+{"seq":2,"event":"checkpoint"}
+{"seq":3,"event":"update"}
+{"seq":4,"event":"update"}
+{"seq":5,"event":"update"}
+{"seq":6,"event":"checkpoint"}
+{"seq":7,"event":"update"}
+{"seq":8,"event":"update"}
+{"seq":9,"event":"update"}
+{"seq":10,"event":"finalize"}

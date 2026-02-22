@@ -1,0 +1,7 @@
+{
+  "manifest_version": "1.0",
+  "journal_sha256": "demo_hash_placeholder",
+  "public_key_fingerprint": "ed25519-demo-key-fingerprint",
+  "checkpoint_window": 5,
+  "description": "ARO-Audit demonstration manifest"
+}

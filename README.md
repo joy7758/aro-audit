@@ -1,172 +1,67 @@
-# AAR/ALC (ARO-Audit)
+# ARO Audit Profile
 
-> **AAR-MCP-2.0 RC1（对外冻结）**：规范 + Conformance + 可下载 Bundle 已发布。
-> - 规范：`docs/spec/AAR-MCP-2.0-Core-Spec.md`
-> - Conformance：`spec/CONFORMANCE.md`
-> - Bundle：`release/spec_bundle_rc1.zip`
-> - 验证：运行 `./tools/run_conformance.sh`
+ARO Audit Profile defines an evidence-layer protocol for high-authority AI actions.
+Operationally, it functions as an **immune system** for agent execution: it continuously records, seals, and verifies action traces, so unauthorized mutation is detected during audit and replay.
 
-# AAR-MCP-2.0
-## Evidence Layer for AI With Real Authority
+## Credentials
 
-AAR-MCP-2.0 is a tamper-evident evidence protocol for AI actions in privileged environments.
-AAR-MCP-2.0 是一个面向高权限 AI 行为的防篡改证据层协议。
+- FDO Testbed ID: `21.T11966/aro-audit-profile-v1`
+- DOI: `https://doi.org/10.5281/zenodo.18728568`
 
-When an AI can write files, change configs, or trigger financial actions, observability is not enough.
-当 AI 能写文件、改配置、甚至触发转账时，仅有日志远远不够。
+## Core Components
 
-You need verifiable evidence.
-你需要可验证的证据。
+1. Audit Manifest
+- Detached metadata contract for verification context, checkpoint windowing, and key fingerprint references.
 
----
+2. Journal (JSONL)
+- Append-only event stream containing action records and checkpoint records.
+- Each non-empty line is protocol material and is subject to verifier rules.
 
-## Why This Exists | 为什么要做这个协议
+3. Verification Engine
+- Recomputes chain integrity, Merkle consistency, checkpoint signatures, and range continuity.
+- Fails closed on structural, cryptographic, or ordering violations.
 
-Traditional logs answer: "What did the system say happened?"
-传统日志回答的是：“系统声称发生了什么？”
+4. Public Key Anchoring
+- Ed25519 public key anchors trust for checkpoint signature validation.
+- Enables independent third-party verification without private key access.
 
-AAR-MCP answers: "Can anyone independently verify what happened and detect tampering?"
-AAR-MCP 回答的是：“任何第三方能否独立验证发生了什么，并检测篡改？”
+## Hash-Chain Logic
 
----
+Execution continuity is modeled as:
 
-## Core Guarantees | 核心保证
+\[
+Root_{n} = \mathcal{H}(Root_{n-1} \parallel \text{Event}_{n})
+\]
 
-- `AAR` records each high-risk action with explicit fields (`seq`, `tool`, `args`, `timestamp`).
-- `CHECKPOINT` seals record ranges using Merkle root + Ed25519 signature.
-- `prev_checkpoint_hash` links checkpoints into a verifiable chain.
-- Any deletion, insertion, reordering, or field tampering breaks verification.
+Where:
+- `Root_n` is the cumulative integrity state after event `n`
+- `\mathcal{H}` is the canonical hash function over normalized event bytes
+- `\parallel` is byte concatenation
 
-- `AAR` 对高风险操作逐条留痕（`seq`、`tool`、`args`、`timestamp`）。
-- `CHECKPOINT` 通过 Merkle Root 与 Ed25519 对区间封签。
-- `prev_checkpoint_hash` 将多个 checkpoint 串成可验证链。
-- 删除、插入、重排、字段篡改都会导致验证失败。
-
----
-
-## Scope Boundary | 协议边界
-
-AAR-MCP provides tamper-evidence, not endpoint hardening.
-AAR-MCP 提供“可验伪”，不直接提供主机加固。
-
-Out of scope:
-
-- private key theft
-- host compromise before sealing
-- infrastructure availability
-
-不在协议内的问题：私钥泄露、封签前主机沦陷、基础设施可用性。
-
----
-
-## Quickstart (30s)
+## Quickstart
 
 ```bash
 bash quickstart/run.sh
 ```
 
-成功标志：看到 `VERIFY_OK: full chain valid`，并且篡改样本会被拒绝（`Merkle mismatch` 或等价失败）。
+Success criteria:
+- baseline sample: `VERIFY_OK: full chain valid`
+- tampered sample: verification rejection (`Merkle mismatch` / digest / signature failure)
 
-## 30-Second Demo | 30 秒演示
+## Open Discussion
 
-```text
-===============================
- AAR-MCP-2.0 High Risk Demo
-===============================
+Critical questions currently under community review (from mailing-list discussion):
 
-1️⃣ Generating high-risk action...
-High-risk action recorded.
-Amount transferred: 100000
+1. Digest Boundary Contract
+- Should the boundary remain fixed to core execution fields only, with all non-evidence metadata explicitly excluded?
 
-2️⃣ Verifying integrity...
-VERIFY_OK: full chain valid
+2. Checkpoint Semantics and Interop
+- Are `range`, `merkle_root`, and `prev_checkpoint_hash` definitions strict enough to prevent segmented replay/rebuild ambiguity across implementations?
 
-3️⃣ Simulating tampering...
+3. Governance and Trust Anchoring
+- What is the minimum acceptable anchoring policy (Git/WORM/notary/transparency log) for profile-level compliance claims?
 
-4️⃣ Verifying tampered journal...
-Merkle mismatch
-
-===============================
- Demo complete
-===============================
-```
-
-From repo root:
-
-```bash
-cd demo/high_risk_authority
-source ../../.venv/bin/activate
-./run.sh
-```
-
-Expected behavior:
-
-- Original journal: `VERIFY_OK: full chain valid`
-- Tampered journal: verification fails (for example `Merkle mismatch`)
-- Demo key mode: private key stays in memory by default (no `private.pem` is written)
-
-预期结果：原始日志验证通过；篡改后日志验证失败。
-
----
-
-## Spec Status | 协议状态
-
-Core specification is frozen as Release Candidate:
-
-- Spec: `docs/spec/AAR-MCP-2.0-Core-Spec.md`
-- Tag: `spec/v2.0.0-rc1`
-- Audit remediation sync: `docs/AUDIT_REMEDIATION_2026-02-21.md`
-
----
-
-## Repository Map | 仓库结构
-
-- `sdk/mcp_server_wrapper/`: enforcement + checkpoint generation
-- `sdk/verify/`: checkpoint / chain verification
-- `sdk/anchor/`: external anchoring helpers (Git anchor)
-- `demo/high_risk_authority/`: self-contained high-risk demo
-- `docs/spec/`: protocol specification
-
-Note: `mcp-aar` requires an existing Ed25519 private key path via `--key`; it will not auto-generate private keys on disk.
-
----
-
-## One-Line Positioning | 一句话定位
-
-AAR-MCP-2.0 turns AI operation logs into cryptographically verifiable evidence.
-AAR-MCP-2.0 把“可观测日志”升级为“可密码学验证证据”。
-
----
-
-# 🔗 结构示意
-
-AAR Record → Merkle Tree → CHECKPOINT → Signature → Verification
-
-篡改任何一条 AAR  
-        ↓  
-Merkle Root 改变  
-        ↓  
-签名验证失败  
-
----
-
-# 🗣 Open Discussions
-
-We are actively discussing the protocol design:
-
-- 🧠 Core Question  
-  https://github.com/joy7758/aro-audit/discussions/1
-
-- 🔬 Technical Review Guidelines  
-  https://github.com/joy7758/aro-audit/discussions/2
-
-Structured critique is welcome.
-
-## RC1 Review入口
-- Review Guidelines（请按模板提意见）：见 Discussions
-- Issue Tracker（集中收口 Spec/Interop/Security）：见 Discussions
-
-## Citation
-
-Code DOI: https://doi.org/10.5281/zenodo.18728568
+Discussion channels:
+- Review Guidelines: `https://github.com/joy7758/aro-audit/discussions/3`
+- Issue Tracker: `https://github.com/joy7758/aro-audit/discussions/4`
 
