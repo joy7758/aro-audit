@@ -11,3 +11,17 @@ __pycache__/
 .local_backup/
 demo/out_bundle/
 aro_audit.egg-info/
+
+# --- Codex baseline ignore rules ---
+.DS_Store
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+*.egg-info/
