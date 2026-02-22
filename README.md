@@ -165,3 +165,8 @@ Structured critique is welcome.
 ## RC1 Review入口
 - Review Guidelines（请按模板提意见）：见 Discussions
 - Issue Tracker（集中收口 Spec/Interop/Security）：见 Discussions
+
+## Citation
+
+Code DOI: https://doi.org/10.5281/zenodo.18728568
+
