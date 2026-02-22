@@ -1,3 +1,5 @@
+import os
+
 from datetime import UTC, datetime
 from sdk.journal.jsonl_journal import JSONLJournal, JournalConfig
 
@@ -7,6 +9,7 @@ HIGH_RISK_TOOLS = {
     "transfer_funds",
 }
 
+
 def enforce_and_execute(tool_name: str, tool_args: dict, tool_callable):
     """
     强制写 AAR 证据：
@@ -15,17 +18,17 @@ def enforce_and_execute(tool_name: str, tool_args: dict, tool_callable):
     """
 
     if tool_name in HIGH_RISK_TOOLS:
+        journal_path = os.getenv("ARO_JOURNAL_PATH", "demo/out/journal.jsonl")
         aar_statement = {
             "type": "AAR",
             "tool": tool_name,
             "args": tool_args,
-            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z")
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         }
 
         try:
-            journal = JSONLJournal(JournalConfig(path="demo/out/journal.jsonl"))
-            journal.append_statement(aar_statement)
-            journal.close()
+            with JSONLJournal(JournalConfig(path=journal_path)) as journal:
+                journal.append_statement(aar_statement)
         except Exception as e:
             raise RuntimeError(f"AAR 写入失败，拒绝执行: {e}")
 

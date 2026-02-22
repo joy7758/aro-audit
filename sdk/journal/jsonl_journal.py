@@ -21,6 +21,12 @@ class JSONLJournal:
         self._fh = open(config.path, "a+", encoding="utf-8", buffering=1)
         self._lock = threading.Lock()
 
+    def __enter__(self) -> "JSONLJournal":
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        self.close()
+
     def append_statement(self, obj: dict[str, Any]) -> str:
         # Canonical formatting keeps line-level hashes stable across modules.
         line = jcs_dumps(obj).decode("utf-8")

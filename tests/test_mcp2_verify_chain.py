@@ -104,3 +104,21 @@ def test_verify_chain_rejects_last_range_not_covered(tmp_path: Path, capsys) -> 
     out = capsys.readouterr().out
     assert rc == 1
     assert "Last AAR range not covered by checkpoints" in out
+
+
+def test_verify_chain_requires_first_seq_zero(tmp_path: Path, capsys) -> None:
+    private_key = Ed25519PrivateKey.generate()
+    pubkey_path = tmp_path / "pub.pem"
+    _write_pubkey(pubkey_path, private_key)
+
+    aar1 = _build_aar(1)
+    aar_line = jcs_dumps(aar1).decode("utf-8")
+    cp = _build_checkpoint([aar_line], private_key, 1, 1)
+
+    journal = tmp_path / "journal.jsonl"
+    _write_journal(journal, [aar1, cp])
+
+    rc = verify_chain(str(journal), str(pubkey_path))
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "First AAR seq expected 0, got 1" in out

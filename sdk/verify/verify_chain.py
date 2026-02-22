@@ -94,8 +94,10 @@ def verify_chain(path: str, pubkey_path: str) -> int:
         return fail("No AAR found")
 
     ordered_seqs = sorted(aars_by_seq.keys())
+    if ordered_seqs[0] != 0:
+        return fail(f"First AAR seq expected 0, got {ordered_seqs[0]}")
     if ordered_seqs != list(range(len(ordered_seqs))):
-        return fail("Range discontinuity")
+        return fail("AAR sequence not contiguous")
 
     if not checkpoints:
         return fail("No CHECKPOINT found")
