@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="850">
+<style>
+    .title { font: bold 30px sans-serif; }
+    .layer { font: bold 18px sans-serif; }
+    .text { font: 14px sans-serif; }
+</style>
+
+<text x="500" y="40" text-anchor="middle" class="title">
+ARO-Audit Full Positioning Map (FDO 2026)
+</text>
+
+<!-- Technical Layers -->
+<rect x="100" y="100" width="800" height="70" fill="#4CAF50"/>
+<text x="500" y="130" text-anchor="middle" fill="white" class="layer">
+L1 Running Code (Zero Dependency Core)
+</text>
+<text x="500" y="150" text-anchor="middle" fill="white" class="text">
+Multi-target manifest + hash-chain journal + Ed25519 verification
+</text>
+
+<rect x="100" y="180" width="800" height="70" fill="#2E7D32"/>
+<text x="500" y="210" text-anchor="middle" fill="white" class="layer">
+L2 Deterministic Verification Engine
+</text>
+<text x="500" y="230" text-anchor="middle" fill="white" class="text">
+Machine-readable verification_report.json
+</text>
+
+<rect x="100" y="260" width="800" height="70" fill="#1B5E20"/>
+<text x="500" y="290" text-anchor="middle" fill="white" class="layer">
+L3 Archival Integrity Anchor
+</text>
+<text x="500" y="310" text-anchor="middle" fill="white" class="text">
+Zenodo DOI + reproducible audit bundle
+</text>
+
+<rect x="100" y="340" width="800" height="70" fill="#0D47A1"/>
+<text x="500" y="370" text-anchor="middle" fill="white" class="layer">
+L4 Registered FDO Profile
+</text>
+<text x="500" y="390" text-anchor="middle" fill="white" class="text">
+21.T11966/aro-audit-profile-v1 (Type Registry Anchor)
+</text>
+
+<!-- Standardization Proposal Layer -->
+<rect x="100" y="430" width="800" height="80" fill="#6A1B9A"/>
+<text x="500" y="460" text-anchor="middle" fill="white" class="layer">
+L5 Draft Specification Proposal
+</text>
+<text x="500" y="485" text-anchor="middle" fill="white" class="text">
+FDO-Audit-Profile v1.0 (Manifest + Journal + Policy Schema)
+</text>
+
+<rect x="100" y="520" width="800" height="80" fill="#8E24AA"/>
+<text x="500" y="550" text-anchor="middle" fill="white" class="layer">
+L6 Governance & Working Group Path
+</text>
+<text x="500" y="575" text-anchor="middle" fill="white" class="text">
+FDO WG → CEN/CENELEC → ISO/IEC Liaison Path
+</text>
+
+<!-- Social Layer -->
+<rect x="100" y="620" width="800" height="70" fill="#FF9800"/>
+<text x="500" y="650" text-anchor="middle" fill="white" class="layer">
+S1 Community Discussion & Citation
+</text>
+
+<rect x="100" y="700" width="800" height="80" fill="#F44336"/>
+<text x="500" y="730" text-anchor="middle" fill="white" class="layer">
+S2 Standard Adoption & Industrial Integration
+</text>
+<text x="500" y="755" text-anchor="middle" fill="white" class="text">
+DPP / Battery Passport / Cross-border Lifecycle Integrity
+</text>
+
+</svg>

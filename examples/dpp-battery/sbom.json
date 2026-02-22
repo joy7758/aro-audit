@@ -1,6 +1,1 @@
-{
-  "components": [
-    {"name": "CathodeMaterial", "version": "1.2"},
-    {"name": "BatteryManagementSystem", "version": "3.1"}
-  ]
-}
+{"components":[{"name":"CellModule","version":"1.0"}]}

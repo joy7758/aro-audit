@@ -1,12 +1,11 @@
 {
   "status": "OK",
-  "profile_handle": "21.T11966/aro-audit-profile-v1",
+  "profile": "21.T11966/aro-audit-profile-v1",
   "targets_sha256": {
-    "dpp": "6018dba20274c749af6da4491e9bb2dc25a249217f7eda58e19fa10e259e0f7b",
+    "dpp": "94fc8212f0a23f1dc718b8df7a2f768b1be26fc47d37f74eaae502575b66f9c7",
     "certificate": "f1826bc560e3f1d9d8be229eef5732ca7ce9422fc248f2a498fd4ae544baeeb4",
-    "sbom": "9772243d272014dc64edc3d668fedb3fd732468c84c55efeab86309898a1c22a"
+    "sbom": "be461b1610493d13ee76735eacef9f0cbf60438ed6422181477b5c7580a166e8"
   },
-  "journal_sha256": "b572d6493e5c668c76d00aace3fc39cb060c19e7facab8ed74dc0c783bf56fc4",
-  "last_entry_hash": "89917a13a3ae21c33a7a3e1fcf1b6d71daa2f6b6d0c7092859304b7141c793f0",
-  "badge_fingerprint": "05db88164d7cdadb7b2dfce1f67eec2ff7bf48e16a073e0f690908c6955c1ffb"
+  "last_hash": "3d88474fafdf41846e99377a9cd1644e924439b605a2785215ed0e2a46bdd0b8",
+  "badge": "2a3bc74a2c6350c74001a4fa79821a21b37a4651f80ac1a1a2307573520100ff"
 }

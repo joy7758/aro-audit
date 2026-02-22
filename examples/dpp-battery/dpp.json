@@ -1,15 +1,6 @@
 {
-  "dpp_version": "0.1",
+  "dpp_version": "1.0",
   "product_id": "battery-001",
-  "product_type": "battery",
-  "manufacturer": {"name": "ExampleEnergy GmbH", "country": "DE"},
-  "model": "EE-5000",
-  "serial_number": "SN-2026-0001",
-  "manufacture_date": "2026-01-12",
-  "composition": {"chemistry": "NMC", "mass_kg": 24.8},
-  "sustainability": {
-    "carbon_footprint_kg": 72.4,
-    "recycled_content_percent": 18.0,
-    "material_origin_country": "CN"
-  }
+  "manufacturer": "ExampleEnergy GmbH",
+  "carbon_footprint_kg": 72.4
 }
