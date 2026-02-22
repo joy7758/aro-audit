@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it using the metadata below."
+title: "aro-audit"
+type: software
+authors:
+  - family-names: "Zhang"
+    given-names: "Bin"
+repository-code: "https://github.com/joy7758/aro-audit"
+url: "https://github.com/joy7758/aro-audit"
+abstract: "Evidence-layer protocol for high-authority AI action audit and replay verification."
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18728568"
+keywords:
+  - audit-receipt
+  - ai-governance
+  - evidence-layer
+  - merkle
+  - verification
