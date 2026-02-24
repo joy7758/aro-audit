@@ -33,6 +33,8 @@ This is a product-level merge, not a forced codebase merge. It keeps engineering
 - `README.md`: unified entry narrative
 - `MATURITY_PLAN.md`: execution milestones to improve scoring odds
 - `EVIDENCE.md`: generated proof snapshot from local repos
+- `PITCH_15P_CN_EN.md`: 15-page bilingual pitch draft
+- `DEFENSE_QA_CN_EN.md`: bilingual judge Q&A script
 
 ## Regenerate Evidence
 
@@ -43,4 +45,3 @@ bash tools/build_hicool_evidence.sh /Users/zhangbin/GitHub
 ## Recommended Submission Name
 
 `AegisTrust: Verifiable AI Action Governance Stack`
-
