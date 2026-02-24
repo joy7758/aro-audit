@@ -45,6 +45,16 @@ Evidence-layer protocol for high-authority AI action audit and replay verificati
 ARO Audit Profile defines an evidence-layer protocol for high-authority AI actions.
 Operationally, it functions as an **immune system** for agent execution: it continuously records, seals, and verifies action traces, so unauthorized mutation is detected during audit and replay.
 
+## Unified Competition Entry
+
+`aro-audit` is the primary shell for the unified HICOOL 2026 entry, integrating:
+
+- Runtime evidence (`aro-audit`)
+- Action-boundary conformance (`safety-valve-spec`)
+- CI trust gate (`god-spear`)
+
+See `competition/hicool-2026/README.md` for the merged narrative and `competition/hicool-2026/EVIDENCE.md` for the generated proof snapshot.
+
 ## Credentials
 
 - FDO Testbed ID: `21.T11966/aro-audit-profile-v1`
