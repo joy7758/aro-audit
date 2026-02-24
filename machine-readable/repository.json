@@ -59,7 +59,7 @@
       "aro-audit audit-receipt ai-governance 仓库",
       "RR-ARO 参考实现 红岩 宪章"
     ],
-    "onepager": "(pending)",
+    "onepager": "docs/ONEPAGER_CN.md",
     "citation_file": "CITATION.cff",
     "security_file": "SECURITY.md"
   },

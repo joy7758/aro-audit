@@ -8,7 +8,7 @@
 - Repository / 仓库: `aro-audit`
 - URL: https://github.com/joy7758/aro-audit
 - Registry / 注册表: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro
-- Onepager / 一页纸: (pending)
+- Onepager / 一页纸: [`docs/ONEPAGER_CN.md`](../ONEPAGER_CN.md)
 
 ## Recommended Hero Copy (EN)
 Evidence-layer protocol for high-authority AI action audit and replay verification.

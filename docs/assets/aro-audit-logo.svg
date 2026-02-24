@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="240" viewBox="0 0 760 240" role="img" aria-labelledby="title desc">
+  <title id="title">ARO Audit Logo</title>
+  <desc id="desc">Minimal logo for ARO Audit with a shield and checkmark.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f5ca8" />
+      <stop offset="100%" stop-color="#0f2f57" />
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="760" height="240" rx="24" fill="#f3f7fa" />
+
+  <g transform="translate(34 34)">
+    <rect x="0" y="0" width="172" height="172" rx="36" fill="url(#panel)" />
+    <path d="M86 30 L132 50 V88 C132 122 109 149 86 160 C63 149 40 122 40 88V50Z" fill="none" stroke="#ffffff" stroke-width="8" />
+    <path d="M60 92 L78 110 L112 74" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <text x="240" y="102" fill="#0f2f57" font-size="56" font-family="IBM Plex Sans, Segoe UI, Arial, sans-serif" font-weight="700">ARO Audit</text>
+  <text x="240" y="142" fill="#2a557f" font-size="26" font-family="IBM Plex Sans, Segoe UI, Arial, sans-serif">Verifiable Action Evidence</text>
+  <text x="240" y="178" fill="#4d6f91" font-size="20" font-family="IBM Plex Sans, Segoe UI, Arial, sans-serif">Record | Seal | Verify</text>
+</svg>

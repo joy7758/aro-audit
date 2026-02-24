@@ -1,151 +1,65 @@
-# ARO Audit Profile
+<p align="center">
+  <img src="docs/assets/aro-audit-logo.svg" alt="ARO Audit logo" width="460" />
+</p>
 
-<!-- SEARCH_VISIBILITY_BEGIN -->
-## Discoverability Snapshot / 检索曝光摘要
+# ARO Audit
 
-- Standard ID / 标准编号: `RR-ARO`
-- Repository / 仓库名: `aro-audit`
-- A/B Recommended Variant / 推荐版本: `A`
+一句话：`ARO Audit` 是一套让 AI 高风险动作“可留证、可追责、可复验”的开源方案。
 
-### EN Summary / 英文摘要
-Evidence-layer protocol for high-authority AI action audit and replay verification.
+## 这次整合后的项目范围
 
-### CN Summary / 中文摘要
-用于高权限AI动作审计与重放验证的证据层协议。
+`aro-audit` 现在作为主仓库，和另外两个项目组成同一套治理闭环：
 
-### SEO Keywords / 检索关键词
-`audit-receipt`, `ai-governance`, `evidence-layer`, `merkle`, `verification`
+- `god-spear`（事前）：在 CI 阶段检查信任边界，边界没说清就不让发布。
+- `safety-valve-spec`（事中）：关键动作必须带可验证收据，避免“做了但说不清”。
+- `aro-audit`（事后）：把动作写成不可篡改证据链，支持独立重放验真。
 
-### Suggested Search Phrases (EN)
-- aro-audit RR-ARO open standard
-- aro-audit audit-receipt ai-governance github
-- RR-ARO audit-receipt reference implementation
+这是产品层整合，不是把三个代码仓库强行混成一个仓库。这样做的好处是工程风险更低、迭代更快、对外叙事更清楚。
 
-### 建议检索短语（中文）
-- aro-audit RR-ARO 标准 规范
-- aro-audit audit-receipt ai-governance 仓库
-- RR-ARO 参考实现 红岩 宪章
+## 一页纸
 
-### A/B Hero Variants / 首屏 A/B 版本
-- Variant A (Citation-First) / 引用优先: [`docs/readme-ab/README_HERO_A_CN_EN.md`](docs/readme-ab/README_HERO_A_CN_EN.md)
-- Variant B (Adoption-First) / 落地优先: [`docs/readme-ab/README_HERO_B_CN_EN.md`](docs/readme-ab/README_HERO_B_CN_EN.md)
-- Experiment Window / 观测窗口: 14 days
+- [ARO Audit 一页纸（CN）](docs/ONEPAGER_CN.md)
 
-### Quick Links / 快速入口
-- Governance Hub / 总入口: https://github.com/joy7758/RedRock-Constitution
-- Standards Registry / 标准注册表: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro
-- Repos Index / 仓库索引: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/REPOS_INDEX_CN_EN.md
-- Ecosystem Graph / 生态关系图: https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/ECOSYSTEM_GRAPH_CN_EN.md
-- Onepager / 一页纸: (pending)
-- Citation / 引用元数据: `CITATION.cff`
-- Security Policy / 安全策略: `SECURITY.md`
-- Machine-readable / 机器可读: `machine-readable/repository.json`
-<!-- SEARCH_VISIBILITY_END -->
+## 你能直接用它做什么
 
-ARO Audit Profile defines an evidence-layer protocol for high-authority AI actions.
-Operationally, it functions as an **immune system** for agent execution: it continuously records, seals, and verifies action traces, so unauthorized mutation is detected during audit and replay.
+- 给关键动作生成标准化证据，而不只是普通日志。
+- 在审计时快速发现“删改补写”。
+- 对内给安全/合规复盘，对外给客户或监管做第三方可验证证明。
 
-## Unified Competition Entry
-
-`aro-audit` is the primary shell for the unified HICOOL 2026 entry, integrating:
-
-- Runtime evidence (`aro-audit`)
-- Action-boundary conformance (`safety-valve-spec`)
-- CI trust gate (`god-spear`)
-
-See `competition/hicool-2026/README.md` for the merged narrative and `competition/hicool-2026/EVIDENCE.md` for the generated proof snapshot.
-
-## Credentials
-
-- FDO Testbed ID: `21.T11966/aro-audit-profile-v1`
-- DOI: `https://doi.org/10.5281/zenodo.18728568`
-
-## Core Components
-
-1. Audit Manifest
-- Detached metadata contract for verification context, checkpoint windowing, and key fingerprint references.
-
-2. Journal (JSONL)
-- Append-only event stream containing action records and checkpoint records.
-- Each non-empty line is protocol material and is subject to verifier rules.
-
-3. Verification Engine
-- Recomputes chain integrity, Merkle consistency, checkpoint signatures, and range continuity.
-- Fails closed on structural, cryptographic, or ordering violations.
-
-4. Public Key Anchoring
-- Ed25519 public key anchors trust for checkpoint signature validation.
-- Enables independent third-party verification without private key access.
-
-## Hash-Chain Logic
-
-Execution continuity is modeled as:
-
-\[
-Root_{n} = \mathcal{H}(Root_{n-1} \parallel \text{Event}_{n})
-\]
-
-Where:
-- `Root_n` is the cumulative integrity state after event `n`
-- `\mathcal{H}` is the canonical hash function over normalized event bytes
-- `\parallel` is byte concatenation
-
-## Quickstart
+## 快速开始（30 秒）
 
 ```bash
 bash quickstart/run.sh
 ```
 
-Success criteria:
-- baseline sample: `VERIFY_OK: full chain valid`
-- tampered sample: verification rejection (`Merkle mismatch` / digest / signature failure)
+看到以下结果就算成功：
 
-## Open Discussion
+- baseline 样本输出 `VERIFY_OK: full chain valid`
+- 篡改样本会被拒绝（`Merkle mismatch` 或签名/摘要失败）
 
-Critical questions currently under community review (from mailing-list discussion):
+## 仓库入口
 
-1. Digest Boundary Contract
-- Should the boundary remain fixed to core execution fields only, with all non-evidence metadata explicitly excluded?
+- 快速体验：[`quickstart/README.md`](quickstart/README.md)
+- 协议规范：[`spec/AAR_v1.0.md`](spec/AAR_v1.0.md)
+- 一致性向量：[`spec/test_vectors/README.md`](spec/test_vectors/README.md)
+- SDK 与 CLI：[`sdk/`](sdk/)
+- 高风险权限演示：[`demo/high_risk_authority/README.md`](demo/high_risk_authority/README.md)
+- HICOOL 合并叙事：[`competition/hicool-2026/README.md`](competition/hicool-2026/README.md)
 
-2. Checkpoint Semantics and Interop
-- Are `range`, `merkle_root`, and `prev_checkpoint_hash` definitions strict enough to prevent segmented replay/rebuild ambiguity across implementations?
+## 关联项目（已合并进方案）
 
-3. Governance and Trust Anchoring
-- What is the minimum acceptable anchoring policy (Git/WORM/notary/transparency log) for profile-level compliance claims?
+- `safety-valve-spec`：https://github.com/joy7758/safety-valve-spec
+- `god-spear`：https://github.com/joy7758/god-spear
+- 三项目证据快照：[`competition/hicool-2026/EVIDENCE.md`](competition/hicool-2026/EVIDENCE.md)
 
-Discussion channels:
-- Review Guidelines: `https://github.com/joy7758/aro-audit/discussions/3`
-- Issue Tracker: `https://github.com/joy7758/aro-audit/discussions/4`
+## 当前凭证
 
-<!-- ECOSYSTEM_LINKS_BEGIN -->
-## Ecosystem Links / 生态关系链接
-
-![quality-baseline](https://github.com/joy7758/aro-audit/actions/workflows/quality-baseline.yml/badge.svg)
-
-### CN
-- 总入口（宪章）：[RedRock-Constitution](https://github.com/joy7758/RedRock-Constitution)
-- 标准注册表：[STANDARDS_REGISTRY](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro)
-- 仓库总索引：[REPOS_INDEX_CN_EN](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/REPOS_INDEX_CN_EN.md)
-- 全局生态图：[ECOSYSTEM_GRAPH_CN_EN](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/ECOSYSTEM_GRAPH_CN_EN.md)
+- FDO Testbed ID：`21.T11966/aro-audit-profile-v1`
+- DOI：`https://doi.org/10.5281/zenodo.18728568`
+- 引用信息：[`CITATION.cff`](CITATION.cff)
+- 安全策略：[`SECURITY.md`](SECURITY.md)
 - 机器可读元数据：[`machine-readable/repository.json`](machine-readable/repository.json)
 
-### EN
-- Governance hub: [RedRock-Constitution](https://github.com/joy7758/RedRock-Constitution)
-- Standards registry: [STANDARDS_REGISTRY](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro)
-- Repositories index: [REPOS_INDEX_CN_EN](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/REPOS_INDEX_CN_EN.md)
-- Global ecosystem graph: [ECOSYSTEM_GRAPH_CN_EN](https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/ECOSYSTEM_GRAPH_CN_EN.md)
-- Machine-readable metadata: [`machine-readable/repository.json`](machine-readable/repository.json)
+## 许可证
 
-### Related Repositories / 关联仓库
-- [AASP-Core](https://github.com/joy7758/AASP-Core)
-- [pFDO-Specification](https://github.com/joy7758/pFDO-Specification)
-- [safety-valve-spec](https://github.com/joy7758/safety-valve-spec)
-- [RedRock-Constitution](https://github.com/joy7758/RedRock-Constitution)
-
-### Search Keywords / 检索关键词
-`audit-receipt`, `ai-governance`, `evidence-layer`, `merkle`, `verification`
-
-### Bilingual Project Abstract / 双语项目摘要
-- EN: Evidence-layer protocol for high-authority AI action audit and replay verification.
-- CN: 用于高权限AI动作审计与重放验证的证据层协议。
-<!-- ECOSYSTEM_LINKS_END -->
+本项目采用 [`LICENSE`](LICENSE) 中定义的许可条款。
