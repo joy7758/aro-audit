@@ -7,13 +7,17 @@ authors:
     given-names: "Bin"
 repository-code: "https://github.com/joy7758/aro-audit"
 url: "https://github.com/joy7758/aro-audit"
-abstract: "Evidence-layer protocol for high-authority AI action audit and replay verification."
+abstract: "Evidence-layer protocol for high-authority AI action audit, tamper detection, and replay verification."
 identifiers:
   - type: doi
     value: "10.5281/zenodo.18728568"
 keywords:
-  - audit-receipt
-  - ai-governance
-  - evidence-layer
-  - merkle
-  - verification
+  - ai action audit
+  - audit receipt
+  - ai governance
+  - evidence layer
+  - tamper-evident log
+  - merkle checkpoint
+  - ed25519 signature
+  - replay verification
+  - high-risk ai compliance

@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-02-22T15:13:10+00:00",
+  "generated_at": "2026-02-24T00:00:00+00:00",
   "repository": "aro-audit",
   "standard_id": "RR-ARO",
   "status": "Incubation",
-  "summary_en": "Evidence-layer protocol for high-authority AI action audit and replay verification.",
-  "summary_cn": "用于高权限AI动作审计与重放验证的证据层协议。",
+  "summary_en": "Evidence-layer protocol for high-authority AI action audit, tamper detection, and replay verification.",
+  "summary_cn": "面向高权限 AI 动作的证据层协议，用于审计留痕、篡改检测和重放验真。",
   "github_url": "https://github.com/joy7758/aro-audit",
   "governance_hub": "https://github.com/joy7758/RedRock-Constitution",
   "registry_url": "https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/STANDARDS_REGISTRY.md#rr-aro",
@@ -13,11 +13,15 @@
   "ecosystem_graph_url": "https://github.com/joy7758/RedRock-Constitution/blob/main/docs/registry/ECOSYSTEM_GRAPH_CN_EN.md",
   "quality_workflow": "https://github.com/joy7758/aro-audit/actions/workflows/quality-baseline.yml",
   "keywords": [
-    "audit-receipt",
-    "ai-governance",
-    "evidence-layer",
-    "merkle",
-    "verification"
+    "ai action audit",
+    "audit receipt",
+    "ai governance",
+    "evidence layer",
+    "tamper-evident log",
+    "merkle checkpoint",
+    "ed25519 signature",
+    "replay verification",
+    "high-risk ai compliance"
   ],
   "language_support": [
     "zh-CN",
@@ -48,16 +52,16 @@
   "discoverability": {
     "version": "1.0.0",
     "readme_section": "Discoverability Snapshot / 检索曝光摘要",
-    "keywords_density_target": "5-10 high-signal keywords in top README section",
+    "keywords_density_target": "8-12 high-signal keywords in top README section",
     "search_phrases_en": [
-      "aro-audit RR-ARO open standard",
-      "aro-audit audit-receipt ai-governance github",
-      "RR-ARO audit-receipt reference implementation"
+      "aro-audit RR-ARO open standard reference implementation",
+      "ai action audit tamper-evident replay verification github",
+      "merkle checkpoint ed25519 audit receipt for agents"
     ],
     "search_phrases_cn": [
-      "aro-audit RR-ARO 标准 规范",
-      "aro-audit audit-receipt ai-governance 仓库",
-      "RR-ARO 参考实现 红岩 宪章"
+      "aro-audit RR-ARO 标准 参考实现",
+      "AI 动作审计 可验证证据链 篡改检测",
+      "高风险 AI 治理 Merkle checkpoint Ed25519"
     ],
     "onepager": "docs/ONEPAGER_CN.md",
     "citation_file": "CITATION.cff",

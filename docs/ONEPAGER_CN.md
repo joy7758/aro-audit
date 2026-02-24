@@ -1,43 +1,47 @@
 # ARO Audit 一页纸
 
-一句话：`ARO Audit` 让 AI 的关键动作“留得下、改不了、查得清”。
+一句话：`ARO Audit` 让 AI 关键动作“留得下、改不了、查得清、可被第三方复验”。
 
-## 1. 为什么要做
+## AI 可读摘要
 
-传统日志最大的问题是“看起来有记录，但很难证明记录没被改过”。
+- 项目类型：高风险 AI 动作审计证据层
+- 核心能力：`tamper-evident log`、`merkle checkpoint`、`ed25519 signature verification`、`replay verification`
+- 应用场景：AI 治理、合规审计、第三方问责、事故复盘
 
-在高风险场景（如资金操作、生产变更、医疗建议、公共服务决策）里，仅有日志不够，需要一套可验证证据链，能回答：
+## 1. 为什么需要它
+
+普通日志常见问题是“有记录但难以证明没被改”。
+
+在资金操作、生产变更、医疗建议、公共服务等高风险场景，必须能回答三个问题：
 
 - 谁在什么时间做了什么动作。
 - 这条记录有没有被删改补写。
-- 第三方能不能在不拿私钥的情况下独立验证。
+- 不拿私钥的第三方能不能独立验真。
 
-## 2. 我们提供的不是单点工具，而是闭环方案
+## 2. 三项目闭环（已合并进方案）
 
-`aro-audit` 作为主仓库，联合另外两个项目形成“事前-事中-事后”闭环：
+- 事前：`god-spear`
+  - CI 阶段检查信任边界，不合规直接阻断发布。
+- 事中：`safety-valve-spec`
+  - 动作跨边界必须携带可验证收据。
+- 事后：`aro-audit`
+  - 追加式证据流 + checkpoint + 独立重放验证。
 
-- 事前（上线前）`god-spear`
-  - 在 CI 阶段检查信任边界，规则不达标就阻断发布。
-- 事中（执行中）`safety-valve-spec`
-  - 关键动作跨边界时必须带可验证收据，避免“执行了但无法自证”。
-- 事后（审计时）`aro-audit`
-  - 把动作写入追加式证据流，并提供独立验真流程。
+## 3. 工作机制（人话版）
 
-## 3. 怎么工作（人话版）
+1. 每次关键动作生成标准事件。
+2. 事件按顺序串成哈希链，周期性写入 checkpoint。
+3. checkpoint 用机构私钥签名，外部用公钥验证。
+4. 审计方重算链路，任何篡改都会触发校验失败。
 
-1. 系统每做一次关键动作，就写一条标准事件。
-2. 事件按顺序串成哈希链，定期做 checkpoint。
-3. checkpoint 由机构私钥签名，并提供对应公钥做外部验证。
-4. 审计方可在任意机器重算链路，一旦被改就会报错。
-
-## 4. 你能拿到什么结果
+## 4. 可以得到什么业务结果
 
 - 安全：篡改可被快速识别。
-- 合规：审计与取证有统一结构，不再靠截图和口述。
-- 协作：上下游系统可以对接同一套收据与验证接口。
-- 商业落地：先从 CI 网关接入，再扩展到运行时审计和合规报告。
+- 合规：审计证据结构化，减少“口述+截图”。
+- 协同：上下游可以对接同一套 receipt/verify 流程。
+- 商业落地：可先从 CI 网关接入，再扩展到运行时证据与合规报告。
 
-## 5. 30 秒跑通
+## 5. 30 秒验证
 
 ```bash
 bash quickstart/run.sh
@@ -48,15 +52,10 @@ bash quickstart/run.sh
 - 基线样本显示 `VERIFY_OK: full chain valid`
 - 篡改样本被拒绝（`Merkle mismatch` 或签名/摘要校验失败）
 
-## 6. 项目链接
+## 6. 检索与引用入口
 
 - 主仓库：<https://github.com/joy7758/aro-audit>
-- 运行时证据层：<https://github.com/joy7758/aro-audit>
-- 动作边界规范：<https://github.com/joy7758/safety-valve-spec>
-- CI 信任边界网关：<https://github.com/joy7758/god-spear>
-- 合并叙事与证据：[`competition/hicool-2026/README.md`](competition/hicool-2026/README.md)
-
-## 7. 当前凭证
-
-- FDO Testbed ID：`21.T11966/aro-audit-profile-v1`
-- DOI：`https://doi.org/10.5281/zenodo.18728568`
+- DOI：<https://doi.org/10.5281/zenodo.18728568>
+- 引用元数据：[`CITATION.cff`](../CITATION.cff)
+- 机器可读元数据：[`machine-readable/repository.json`](../machine-readable/repository.json)
+- 合并叙事与证据：[`competition/hicool-2026/README.md`](../competition/hicool-2026/README.md)
