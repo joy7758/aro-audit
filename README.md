@@ -173,6 +173,8 @@ Run the following script inside the bundle directory to verify each file’s SHA
 进入 bundle 目录后运行下列脚本，可按 `MANIFEST.json` 对每个文件进行 SHA256/字节数验真。
 
 ```bash
+cd artifacts/vpml_bundle_<UTC>_<git>
+
 python - <<'PY'
 import json, hashlib, os, sys
 from pathlib import Path

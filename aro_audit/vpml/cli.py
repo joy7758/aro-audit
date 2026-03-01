@@ -174,6 +174,7 @@ def _write_manifest(
         except Exception:
             continue
 
+    entries = sorted(entries, key=lambda x: x["name"])
     manifest = dict(metadata)
     manifest["files"] = entries
     manifest_path = os.path.join(bundle_path, "MANIFEST.json")
