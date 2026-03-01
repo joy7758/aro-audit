@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional
 
 
+
 def _resolve_repo_root(start_dir: Optional[str] = None) -> str:
     """
     Best-effort resolve repository root.
@@ -331,11 +332,13 @@ def main() -> None:
         allowed_edge_types=allowed_edge_types,
     )
 
+    # JSON stdout
     if args.pretty:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     else:
         print(json.dumps(result, ensure_ascii=False))
 
+    # JSON audit file
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
@@ -345,11 +348,17 @@ def main() -> None:
     report_md_final: Optional[str] = None
     explanations = None
     if args.explain or args.report_md or args.bundle_dir:
-        explanations = explainer.explain_sci_result(
-            scorer,
-            result,
-            top_k_paths=args.top_k,
-        )
+        # Explanation (stderr)
+        if args.explain:
+            print("\n" + "=" * 60, file=sys.stderr)
+            print("VPML RISK EXPLANATION REPORT", file=sys.stderr)
+            print("=" * 60 + "\n", file=sys.stderr)
+
+            explanations = explainer.explain_sci_result(
+                scorer,
+                result,
+                top_k_paths=args.top_k,
+            )
 
     if args.explain and explanations is not None:
         print("\n" + "=" * 60, file=sys.stderr)
@@ -388,6 +397,7 @@ def main() -> None:
         print(f"[+] Markdown report saved to: {os.path.abspath(args.report_md)}", file=sys.stderr)
 
     dot_output_path = ""
+    # DOT output
     if args.dot:
         dot_content = viz.to_dot(scorer, result, title=args.dot_title)
         viz.save_dot(args.dot, dot_content)

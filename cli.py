@@ -2,20 +2,20 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 import os
+import sys
 
 # Ensure we can import from the package even if running as script
 try:
-    from aro_audit.vpml.scorer import VPMLScorer
     from aro_audit.vpml import explainer, viz
+    from aro_audit.vpml.scorer import VPMLScorer
 except ImportError:
     # Fix: Go up 3 levels (aro_audit/vpml/cli.py -> repo_root) to ensure package resolution
     REPO_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
     if REPO_ROOT not in sys.path:
         sys.path.insert(0, REPO_ROOT)
-    from aro_audit.vpml.scorer import VPMLScorer
     from aro_audit.vpml import explainer, viz
+    from aro_audit.vpml.scorer import VPMLScorer
 
 def main() -> None:
     ap = argparse.ArgumentParser(

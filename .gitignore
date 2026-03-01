@@ -27,3 +27,5 @@ env/
 *.egg-info/
 
 artifacts/
+conformance_report.json
+conformance_report.md

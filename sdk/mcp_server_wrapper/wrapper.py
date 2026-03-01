@@ -258,6 +258,11 @@ def main() -> int:
                 if tool_call:
                     tool_name, tool_args = tool_call
                     incoming_json = tool_args if isinstance(tool_args, dict) else {}
+                    if not isinstance(tool_name, str) or not tool_name:
+                        if fail_closed:
+                            send_error_response(req_id, "Invalid tool call: missing tool name")
+                        continue
+
                     if tool_name in high_risk_tools:
                         required_checkpoint_root = None
                         if isinstance(incoming_json, dict):

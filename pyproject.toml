@@ -39,3 +39,31 @@ security = [
 mcp-aar = "sdk.mcp_server_wrapper.wrapper:main"
 aro = "sdk.cli.aro:app"
 aro-vpml = "aro_audit.vpml.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+  "competition",
+  "demo",
+  "examples",
+  "aro-audit-v1",
+  "aro-audit-v1 2",
+  "sdk/anchor",
+  "sdk/cli",
+  "sdk/mcp_server_wrapper",
+  "sdk/verify/verify.py",
+  "tools",
+  "explainer.py",
+  "viz.py",
+  "aro_audit/vpml/cli.py",
+  "aro_audit/vpml/explainer.py",
+  "aro_audit/vpml/viz.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"sdk/verify/verify.py" = ["E401", "E402"]

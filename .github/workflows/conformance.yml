@@ -45,3 +45,19 @@ jobs:
           else
             echo "OK: predicate mutation rejected"
           fi
+
+      - name: Runtime confinement negative tests
+        run: |
+          set -euo pipefail
+          chmod +x conformance/run.sh conformance/report_generator.sh conformance/tests/*.sh
+          bash conformance/run.sh
+
+      - name: Upload confinement reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: confinement-reports
+          path: |
+            conformance_report.json
+            conformance_report.md
+          if-no-files-found: warn

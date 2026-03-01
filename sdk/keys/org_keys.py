@@ -1,11 +1,14 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 joy7758 contributors
 from __future__ import annotations
+
 import os
 from dataclasses import dataclass
 
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+
 
 @dataclass
 class KeyPair:
@@ -53,5 +56,5 @@ def verify(pub: Ed25519PublicKey, msg: bytes, sig_hex: str) -> bool:
     try:
         pub.verify(bytes.fromhex(sig_hex), msg)
         return True
-    except Exception:
+    except (InvalidSignature, TypeError, ValueError):
         return False

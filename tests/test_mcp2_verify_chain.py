@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -44,7 +45,7 @@ def _build_checkpoint(aar_lines: list[str], private_key: Ed25519PrivateKey, star
     return payload
 
 
-def _write_journal(path: Path, records: list[dict[str, object]]) -> None:
+def _write_journal(path: Path, records: list[dict[str, Any]]) -> None:
     lines = [jcs_dumps(rec).decode("utf-8") for rec in records]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -122,3 +123,73 @@ def test_verify_chain_requires_first_seq_zero(tmp_path: Path, capsys) -> None:
     out = capsys.readouterr().out
     assert rc == 1
     assert "First AAR seq expected 0, got 1" in out
+
+
+def test_verify_chain_rejects_invalid_json(tmp_path: Path, capsys) -> None:
+    private_key = Ed25519PrivateKey.generate()
+    pubkey_path = tmp_path / "pub.pem"
+    _write_pubkey(pubkey_path, private_key)
+
+    journal = tmp_path / "journal.jsonl"
+    journal.write_text("{not-json}\n", encoding="utf-8")
+
+    rc = verify_chain(str(journal), str(pubkey_path))
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "Invalid JSON at line 1" in out
+
+
+def test_verify_chain_rejects_non_object_json(tmp_path: Path, capsys) -> None:
+    private_key = Ed25519PrivateKey.generate()
+    pubkey_path = tmp_path / "pub.pem"
+    _write_pubkey(pubkey_path, private_key)
+
+    journal = tmp_path / "journal.jsonl"
+    journal.write_text("[]\n", encoding="utf-8")
+
+    rc = verify_chain(str(journal), str(pubkey_path))
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "Invalid JSON object at line 1" in out
+
+
+def test_verify_chain_rejects_unsupported_protocol_version(tmp_path: Path, capsys) -> None:
+    private_key = Ed25519PrivateKey.generate()
+    pubkey_path = tmp_path / "pub.pem"
+    _write_pubkey(pubkey_path, private_key)
+
+    bad_aar = {
+        "version": "AAR-MCP-1.0",
+        "type": "AAR",
+        "seq": 0,
+        "tool": "write_file",
+        "args": {"path": "/tmp/a.txt"},
+        "timestamp": "2026-02-22T00:00:00Z",
+    }
+
+    journal = tmp_path / "journal.jsonl"
+    _write_journal(journal, [bad_aar])
+
+    rc = verify_chain(str(journal), str(pubkey_path))
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "Unsupported protocol major version" in out
+
+
+def test_verify_chain_rejects_invalid_checkpoint_signature(tmp_path: Path, capsys) -> None:
+    private_key = Ed25519PrivateKey.generate()
+    pubkey_path = tmp_path / "pub.pem"
+    _write_pubkey(pubkey_path, private_key)
+
+    aar = _build_aar(0)
+    aar_line = jcs_dumps(aar).decode("utf-8")
+    checkpoint = _build_checkpoint([aar_line], private_key, 0, 0)
+    checkpoint["signature"] = "00" * 64
+
+    journal = tmp_path / "journal.jsonl"
+    _write_journal(journal, [aar, checkpoint])
+
+    rc = verify_chain(str(journal), str(pubkey_path))
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "Invalid signature" in out
