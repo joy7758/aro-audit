@@ -92,8 +92,133 @@ bash quickstart/run.sh
 - baseline 样本输出 `VERIFY_OK: full chain valid`
 - 篡改样本会被拒绝（`Merkle mismatch` 或签名/摘要失败）
 
+## Quickstart / 快速开始（推荐：虚拟环境）
+
+> EN: Some systems enforce PEP 668 (externally-managed environment). Use a virtual environment to install and run ARO-Audit safely.  
+> 中文：部分系统启用 PEP 668（externally-managed environment）限制，请使用虚拟环境进行安装与运行，避免环境冲突。
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .
+
+aro-vpml --help
+examples/run_ab_compare.sh
+```
+
+### Generate a CISO-ready Markdown report / 生成 CISO 可读的 Markdown 报告
+
+```bash
+aro-vpml \
+  --graph examples/pFDO_controlplane_case.yaml \
+  --domain "CP_IAM,CP_CICD,pFDO_KERNEL_PERMS,pFDO_OBJECT_REGISTRY" \
+  --sources "DEV_PUF_WEAK,DEV_PUF_STRONG,WORKLOAD_ID" \
+  --max-depth 5 --max-paths 1000 --top-k 5 \
+  --pretty \
+  --report-md /tmp/vpml_report.md \
+  --report-title "VPML AB Evidence Report"
+```
+
+> EN: JSON is printed to stdout (machine-readable). The Markdown report is saved to `--report-md` for audit delivery.
+> 中文：JSON 始终输出到 stdout（便于管道/自动化）。Markdown 报告独立落盘到 `--report-md`（适合审计交付/邮件附件）。
+
+## Audit Bundle (Manifest + SHA256) / 审计交付包（清单 + SHA256 校验）
+
+**EN**  
+`--bundle-dir` produces a self-contained audit deliverable: results, report, optional summary/dot, and a `MANIFEST.json` with SHA256 checksums and byte sizes for integrity verification.
+
+**中文**  
+`--bundle-dir` 会生成一个“自包含”的审计交付包：结果 JSON、报告 Markdown、可选的 summary/dot，以及带 SHA256/字节数的 `MANIFEST.json`，用于完整性校验与归档复核。
+
+### What’s inside / 包内内容
+
+**EN**
+- `result.json` — machine-readable scoring output (same content as stdout JSON)
+- `report.md` — CISO-ready narrative report (generated even if `--report-md` not provided)
+- `summary.txt` — optional, appended from `--summary-file` when available
+- `graph.dot` — optional, copied from `--dot` when available
+- `MANIFEST.json` — metadata + per-file `{bytes, sha256}`
+
+**中文**
+- `result.json` —— 机器可读的评分输出（与 stdout JSON 同内容）
+- `report.md` —— CISO 可读的叙事报告（即使不传 `--report-md` 也会在 bundle 中生成）
+- `summary.txt` —— 可选：当提供 `--summary-file` 且可读取时写入
+- `graph.dot` —— 可选：当启用 `--dot` 且文件存在时写入
+- `MANIFEST.json` —— 元数据 + 每个文件的 `{bytes, sha256}`
+
+### Generate a bundle / 生成审计包
+
+```bash
+aro-vpml \
+  --graph examples/pFDO_controlplane_case.yaml \
+  --domain "CP_IAM,CP_CICD,pFDO_KERNEL_PERMS,pFDO_OBJECT_REGISTRY" \
+  --sources "DEV_PUF_WEAK,DEV_PUF_STRONG,WORKLOAD_ID" \
+  --max-depth 5 --max-paths 1000 --top-k 5 \
+  --pretty \
+  --summary-file artifacts/SUMMARY.txt \
+  --dot artifacts/vpml_graph.dot \
+  --bundle-dir artifacts
+```
+
+> EN: The bundle name defaults to `vpml_bundle_<UTC>_<git>`. Use `--bundle-name` to override.
+> 中文：bundle 名称默认 `vpml_bundle_<UTC>_<git>`，可用 `--bundle-name` 自定义。
+
+### Verify MANIFEST / 校验 MANIFEST（完整性验真）
+
+**EN**  
+Run the following script inside the bundle directory to verify each file’s SHA256 and byte size against `MANIFEST.json`.
+
+**中文**  
+进入 bundle 目录后运行下列脚本，可按 `MANIFEST.json` 对每个文件进行 SHA256/字节数验真。
+
+```bash
+python - <<'PY'
+import json, hashlib, os, sys
+from pathlib import Path
+
+bundle = Path(".")
+m = bundle / "MANIFEST.json"
+if not m.exists():
+    print("ERROR: MANIFEST.json not found in current directory", file=sys.stderr)
+    sys.exit(1)
+
+manifest = json.loads(m.read_text(encoding="utf-8"))
+ok_all = True
+
+def sha256_file(p: Path) -> str:
+    h = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+for item in manifest.get("files", []):
+    name = item["name"]
+    expected_sha = item["sha256"]
+    expected_bytes = item["bytes"]
+    p = bundle / name
+    if not p.exists():
+        print(f"[FAIL] missing: {name}")
+        ok_all = False
+        continue
+    actual_bytes = p.stat().st_size
+    actual_sha = sha256_file(p)
+    ok = (actual_bytes == expected_bytes) and (actual_sha == expected_sha)
+    print(f"[{'OK' if ok else 'FAIL'}] {name} bytes={actual_bytes} sha256={actual_sha}")
+    ok_all = ok_all and ok
+
+print("ALL_OK =", ok_all)
+sys.exit(0 if ok_all else 2)
+PY
+```
+
+- **EN**: The manifest is the source of truth for reproducibility and integrity of the audit deliverable.
+- **中文**：`MANIFEST.json` 是审计交付包的可复现与完整性“真源”。
+
 ## 全栈验证入口
 
+- Evidence / 证据页: [VPML A/B Evidence (Physical Anchor → SCI ↓) / 物理锚点增强使 SCI 下降](docs/vpml/AB_EVIDENCE.md)
 - 一页纸：[`docs/ONEPAGER_CN.md`](docs/ONEPAGER_CN.md)
 - 快速体验：[`quickstart/README.md`](quickstart/README.md)
 - 协议规范：[`spec/AAR_v1.0.md`](spec/AAR_v1.0.md)
