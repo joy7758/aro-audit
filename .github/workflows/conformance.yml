@@ -56,20 +56,23 @@ jobs:
           set -euo pipefail
           echo "Initiating AAR-MCP-2.0 Hard-Gate Boundary..."
           chmod +x conformance/run.sh conformance/report_generator.sh conformance/tests/*.sh
+          WORKSPACE="${PWD}"
+          RUNNER_HOME="${HOME}"
+          echo "Workspace: ${WORKSPACE}"
+          echo "Runner home: ${RUNNER_HOME}"
 
-          sudo --preserve-env=HOME,PWD bwrap \
-            --unshare-user \
+          sudo --preserve-env=WORKSPACE,RUNNER_HOME bwrap \
             --unshare-ipc \
             --unshare-pid \
             --unshare-net \
             --ro-bind / / \
             --dev /dev \
             --proc /proc \
-            --ro-bind "$HOME" "$HOME" \
-            --bind "$PWD" "$PWD" \
+            --ro-bind "${RUNNER_HOME}" "${RUNNER_HOME}" \
+            --bind "${WORKSPACE}" "${WORKSPACE}" \
             --tmpfs /tmp \
             --tmpfs /var/tmp \
-            --chdir "$PWD" \
+            --chdir "${WORKSPACE}" \
             --die-with-parent \
             --new-session \
             bash conformance/run.sh
