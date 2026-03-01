@@ -25,3 +25,5 @@ htmlcov/
 venv/
 env/
 *.egg-info/
+
+artifacts/

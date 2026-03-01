@@ -1,0 +1,13 @@
+HICOOL Materials Generation Check
+Generated at: 2026-02-24 01:27:43 UTC
+Business PPTX: /Users/zhangbin/GitHub/aro-audit/competition/hicool-2026/HICOOL_AegisTrust_BusinessPlan_CN.pptx
+Business PDF: /Users/zhangbin/GitHub/aro-audit/competition/hicool-2026/HICOOL_AegisTrust_BusinessPlan_CN.pdf
+Supplement PDF: /Users/zhangbin/GitHub/aro-audit/competition/hicool-2026/HICOOL_AegisTrust_Supplement.pdf
+
+[Check] Business pages >=10: 12 pages
+[Check] Business size <=50MB: 0.19 MB
+[Check] Supplement size <=50MB: 0.17 MB
+[Check] Slide count designed: 12
+[Check] Language: Chinese-only deck content
+[Check] Contains required sections: 12/12
+[Check] Visuals included: flowchart + comparison table + timeline + pricing layers

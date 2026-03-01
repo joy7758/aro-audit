@@ -1,0 +1,233 @@
+schema:
+  name: VPML
+  version: "0.1"
+
+# 可选：把权重/归一化范围显式写出来，便于论文口径固定
+config:
+  norms:
+    edge_latency_hi: 3600
+    priv_entropy_hi: 10
+    priv_scope_hi: 1000
+  weights:
+    # node susceptibility weights
+    a_trust_assurance: 1.0
+    a_priv_entropy: 0.9
+    a_priv_scope: 0.9
+    a_obs_coverage: 0.9
+    a_phy_sidechannel: 0.8
+    a_phy_fingerprint: 0.8
+
+graph:
+  nodes:
+    # ---- Threat origin / weak identity anchors ----
+    - id: DEV_PUF_WEAK
+      type: Identity
+      attrs:
+        phy:
+          fingerprint_strength: 0.15    # 弱锚：更容易发生身份“可替代性”
+          sidechannel_exposure: 0.75    # 高侧信道：物理层风险更高
+          energy_budget: 1.0
+        trust:
+          assurance: 0.45
+          halflife: 86400
+          revocation_latency: 2400
+        priv:
+          entropy: 5
+          scope_size: 120
+          separation: 0.4
+        obs:
+          coverage: 0.4
+          fidelity: 0.5
+        asset:
+          criticality: 0.4
+          blast_radius: 8
+
+    - id: DEV_PUF_STRONG
+      type: Identity
+      attrs:
+        phy:
+          fingerprint_strength: 0.85    # 强锚：更难被伪造/克隆
+          sidechannel_exposure: 0.15
+          energy_budget: 1.0
+        trust:
+          assurance: 0.75
+          halflife: 86400
+          revocation_latency: 600
+        priv:
+          entropy: 3
+          scope_size: 40
+          separation: 0.7
+        obs:
+          coverage: 0.7
+          fidelity: 0.7
+        asset:
+          criticality: 0.4
+          blast_radius: 4
+
+    # ---- Control plane & pFDO kernel resources ----
+    - id: CP_IAM
+      type: ControlPlane
+      attrs:
+        phy:
+          fingerprint_strength: 0.30
+          sidechannel_exposure: 0.30
+        trust:
+          assurance: 0.55
+          halflife: 43200
+          revocation_latency: 1800
+        priv:
+          entropy: 7
+          scope_size: 700
+          separation: 0.45
+        obs:
+          coverage: 0.45
+          fidelity: 0.45
+        asset:
+          criticality: 0.95
+          blast_radius: 60
+
+    - id: CP_CICD
+      type: ControlPlane
+      attrs:
+        trust:
+          assurance: 0.60
+          halflife: 43200
+          revocation_latency: 1200
+        priv:
+          entropy: 6
+          scope_size: 500
+          separation: 0.5
+        obs:
+          coverage: 0.5
+          fidelity: 0.5
+        phy:
+          fingerprint_strength: 0.25
+          sidechannel_exposure: 0.35
+        asset:
+          criticality: 0.9
+          blast_radius: 50
+
+    - id: pFDO_KERNEL_PERMS
+      type: Resource
+      attrs:
+        trust:
+          assurance: 0.65
+        priv:
+          entropy: 8
+          scope_size: 900
+        obs:
+          coverage: 0.55
+          fidelity: 0.6
+        phy:
+          fingerprint_strength: 0.40
+          sidechannel_exposure: 0.25
+        asset:
+          criticality: 0.98
+          blast_radius: 120
+
+    - id: pFDO_OBJECT_REGISTRY
+      type: Storage
+      attrs:
+        trust:
+          assurance: 0.70
+        priv:
+          entropy: 5
+          scope_size: 300
+        obs:
+          coverage: 0.65
+          fidelity: 0.65
+        phy:
+          fingerprint_strength: 0.35
+          sidechannel_exposure: 0.2
+        asset:
+          criticality: 0.85
+          blast_radius: 90
+
+    # ---- Additional system nodes to create realistic propagation surface ----
+    - id: WORKLOAD_ID
+      type: Identity
+      attrs:
+        trust:
+          assurance: 0.55
+          halflife: 21600
+          revocation_latency: 1800
+        priv:
+          entropy: 6
+          scope_size: 350
+          separation: 0.4
+        obs:
+          coverage: 0.5
+          fidelity: 0.55
+        phy:
+          fingerprint_strength: 0.0
+          sidechannel_exposure: 0.0
+        asset:
+          criticality: 0.5
+          blast_radius: 20
+
+  edges:
+    # Weak device identity -> IAM trust relationship (worse mediation/observability)
+    - src: DEV_PUF_WEAK
+      dst: CP_IAM
+      type: TrustEdge
+      attrs:
+        edge:
+          assurance: 0.45
+          mediation: 0.35
+          observability: 0.35
+          latency: 1800
+
+    # Strong device identity -> IAM trust relationship (better mediation/observability)
+    - src: DEV_PUF_STRONG
+      dst: CP_IAM
+      type: TrustEdge
+      attrs:
+        edge:
+          assurance: 0.70
+          mediation: 0.65
+          observability: 0.60
+          latency: 600
+
+    # IAM -> pFDO kernel permissions (privilege edge)
+    - src: CP_IAM
+      dst: pFDO_KERNEL_PERMS
+      type: PrivilegeEdge
+      attrs:
+        edge:
+          assurance: 0.60
+          mediation: 0.55
+          observability: 0.55
+          latency: 300
+
+    # CI/CD control plane -> pFDO object registry (exec/data flow)
+    - src: CP_CICD
+      dst: pFDO_OBJECT_REGISTRY
+      type: ExecFlowEdge
+      attrs:
+        edge:
+          assurance: 0.58
+          mediation: 0.50
+          observability: 0.50
+          latency: 900
+
+    # Workload identity trusts IAM (typical)
+    - src: WORKLOAD_ID
+      dst: CP_IAM
+      type: TrustEdge
+      attrs:
+        edge:
+          assurance: 0.55
+          mediation: 0.45
+          observability: 0.50
+          latency: 1200
+
+    # IAM grants workload access to registry (privilege)
+    - src: CP_IAM
+      dst: pFDO_OBJECT_REGISTRY
+      type: PrivilegeEdge
+      attrs:
+        edge:
+          assurance: 0.62
+          mediation: 0.52
+          observability: 0.55
+          latency: 300
