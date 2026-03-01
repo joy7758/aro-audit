@@ -46,11 +46,33 @@ jobs:
             echo "OK: predicate mutation rejected"
           fi
 
-      - name: Runtime confinement negative tests
+      - name: Install MVK Reference Sandbox (Tier-2 Broker)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap
+
+      - name: Run Conformance Suite (Under MVK Confinement)
         run: |
           set -euo pipefail
+          echo "Initiating AAR-MCP-2.0 Hard-Gate Boundary..."
           chmod +x conformance/run.sh conformance/report_generator.sh conformance/tests/*.sh
-          bash conformance/run.sh
+
+          bwrap \
+            --unshare-user \
+            --unshare-ipc \
+            --unshare-pid \
+            --unshare-net \
+            --ro-bind / / \
+            --dev /dev \
+            --proc /proc \
+            --ro-bind "$HOME" "$HOME" \
+            --bind "$PWD" "$PWD" \
+            --tmpfs /tmp \
+            --tmpfs /var/tmp \
+            --chdir "$PWD" \
+            --die-with-parent \
+            --new-session \
+            bash conformance/run.sh
 
       - name: Upload confinement reports
         if: always()
