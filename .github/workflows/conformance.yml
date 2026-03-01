@@ -57,7 +57,7 @@ jobs:
           echo "Initiating AAR-MCP-2.0 Hard-Gate Boundary..."
           chmod +x conformance/run.sh conformance/report_generator.sh conformance/tests/*.sh
 
-          bwrap \
+          sudo --preserve-env=HOME,PWD bwrap \
             --unshare-user \
             --unshare-ipc \
             --unshare-pid \
