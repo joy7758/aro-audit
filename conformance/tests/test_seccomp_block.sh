@@ -35,7 +35,16 @@ EOF
 
 "${CC}" "${TMP_DIR}/fork_test.c" -o "${TMP_DIR}/fork_test"
 
-if "${TMP_DIR}/fork_test" 2>/dev/null; then
+run_target() {
+  local binary_path="$1"
+  if [[ -n "${CONFORMANCE_EXEC_WRAPPER:-}" ]]; then
+    "${CONFORMANCE_EXEC_WRAPPER}" "${binary_path}"
+  else
+    "${binary_path}"
+  fi
+}
+
+if run_target "${TMP_DIR}/fork_test" 2>/dev/null; then
   echo "❌ fork succeeded (unexpected)"
   exit 1
 else

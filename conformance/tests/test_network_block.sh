@@ -29,7 +29,16 @@ EOF
 
 "${CC}" "${TMP_DIR}/net_test.c" -o "${TMP_DIR}/net_test"
 
-if "${TMP_DIR}/net_test" 2>/dev/null; then
+run_target() {
+  local binary_path="$1"
+  if [[ -n "${CONFORMANCE_EXEC_WRAPPER:-}" ]]; then
+    "${CONFORMANCE_EXEC_WRAPPER}" "${binary_path}"
+  else
+    "${binary_path}"
+  fi
+}
+
+if run_target "${TMP_DIR}/net_test" 2>/dev/null; then
   echo "❌ network socket created (unexpected)"
   exit 1
 else

@@ -49,7 +49,7 @@ jobs:
       - name: Install MVK Reference Sandbox (Tier-2 Broker)
         run: |
           sudo apt-get update
-          sudo apt-get install -y bubblewrap
+          sudo apt-get install -y bubblewrap libseccomp-dev
 
       - name: Run Conformance Suite (Under MVK Confinement)
         run: |
@@ -60,6 +60,7 @@ jobs:
           RUNNER_HOME="${HOME}"
           echo "Workspace: ${WORKSPACE}"
           echo "Runner home: ${RUNNER_HOME}"
+          gcc -O2 -Wall -Wextra conformance/seccomp_exec_wrapper.c -lseccomp -o conformance/seccomp_exec_wrapper
 
           sudo --preserve-env=WORKSPACE,RUNNER_HOME bwrap \
             --unshare-ipc \
@@ -73,6 +74,10 @@ jobs:
             --tmpfs /tmp \
             --tmpfs /var/tmp \
             --chdir "${WORKSPACE}" \
+            --setenv HOME "${RUNNER_HOME}" \
+            --setenv CONFORMANCE_EXEC_WRAPPER "${WORKSPACE}/conformance/seccomp_exec_wrapper" \
+            --setenv CONFORMANCE_ALLOW_READONLY_PARENT "1" \
+            --setenv CONFORMANCE_ESCAPE_TARGET "${RUNNER_HOME}/.aro_conformance_escape_test" \
             --die-with-parent \
             --new-session \
             bash conformance/run.sh
