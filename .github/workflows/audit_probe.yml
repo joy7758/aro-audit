@@ -1,0 +1,21 @@
+name: Sovereign Audit Probe
+
+on: [workflow_dispatch] # 允许手动点击运行
+
+jobs:
+  dimensional-probe:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:latest
+      options: --privileged # 核心：探测是否允许开启特权容器
+
+    steps:
+      - name: Evidence Collection
+        run: |
+          echo "[+] 正在抓取容器特权指纹..."
+          cat /proc/1/status | grep -i cap
+          
+          echo "------------------------------------------------"
+          
+          echo "[+] 正在枚举宿主物理设备..."
+          lsblk || echo "[-] 块设备访问被内核拦截"
