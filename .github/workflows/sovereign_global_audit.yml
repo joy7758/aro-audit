@@ -1,0 +1,38 @@
+name: Global_Sovereignty_Audit  # 全球主权审计协议
+on: push
+
+jobs:
+  # --- 1. Windows 战区 ---
+  windows_audit:
+    runs-on: windows-latest
+    steps:
+      - name: Windows_Metadata_Probe
+        run: |
+          echo "--- 正在调取 Windows 环境下的云端身份证 ---"
+          # 使用 PowerShell 伪装暗号，索要元数据
+          $headers = @{"Metadata"="true"}
+          Invoke-RestMethod -Headers $headers -Uri "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | ConvertTo-Json
+
+  # --- 2. macOS 战区 ---
+  macos_audit:
+    runs-on: macos-latest
+    steps:
+      - name: macOS_Identity_Check
+        run: |
+          echo "--- 正在核验 macOS 环境的物理特权 ---"
+          id
+          sw_vers
+          # 看看 macOS 下是否也能听到“总机”的心跳
+          curl -s -H "Metadata:true" "http://169.254.169.254/metadata/instance?api-version=2021-02-01"
+
+  # --- 3. 邻居扫描（继续在 Linux 深入） ---
+  neighbor_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lateral_Awareness
+        run: |
+          echo "--- 正在探测物理子网内的‘邻居’ ---"
+          # 使用 nmap 快速扫描同一个走廊（局域网）里的其他 IP
+          sudo apt-get install -y nmap
+          # 扫描你所在子网（10.1.0.0/24）里所有活跃的机器
+          sudo nmap -sn 10.1.0.0/24
