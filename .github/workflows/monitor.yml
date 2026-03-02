@@ -1,0 +1,46 @@
+name: Silent_Patch_Monitoring  # 监控任务名称
+on:
+  schedule:
+    # 这里的 cron 就是设置频率的地方
+    # '0 0 * * *' 代表每天凌晨 00:00 (UTC) 自动运行一次
+    - cron: '0 0 * * *'
+  push:
+    branches: [ main ]  # 当你提交代码时也会触发一次，方便测试
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Sovereignty Monitor
+        run: |
+          # 这里接着粘贴你刚才看到的那个 bash 脚本内容#!/bin/bash
+# --- 1. 内核特权检测 (CapEff 基准) ---
+EXPECTED_CAP="000001ffffffffff"
+CURRENT_CAP=$(grep "CapEff" /proc/self/status | awk '{print $2}')
+
+# --- 2. 隔离级别检测 (Seccomp 基准) ---
+# 我们现在的基准是 0 (Unconfined)
+CURRENT_SECCOMP=$(grep "Seccomp" /proc/self/status | awk '{print $2}')
+
+# --- 3. 物理邻居探测 (Network Flatness 基准) ---
+# 基准是 > 150 hosts
+sudo apt-get install -y nmap > /dev/null 2>&1
+NEIGHBORS=$(sudo nmap -sn 10.1.0.0/24 | grep "Host is up" | wc -l)
+
+echo "--- 物理主权监控报告 ---"
+echo "Current CapEff:  $CURRENT_CAP"
+echo "Current Seccomp: $CURRENT_SECCOMP"
+echo "Active Neighbors: $NEIGHBORS"
+
+# --- 自动化对比逻辑 ---
+if [ "$CURRENT_SECCOMP" != "0" ] || [ "$CURRENT_CAP" != "$EXPECTED_CAP" ]; then
+    echo "[!] 警告：内核隔离墙疑似发生静默加固！"
+    exit 1
+fi
+
+if [ "$NEIGHBORS" -lt 50 ]; then
+    echo "[!] 警告：物理网段邻居大量消失，疑似网络隔离已上线！"
+    exit 1
+fi
+
+echo "[+] 环境依然处于‘主权塌陷’状态，证据链有效。"
