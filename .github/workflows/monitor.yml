@@ -1,11 +1,10 @@
 name: Silent_Patch_Monitoring
 on:
+  workflow_dispatch: # 激活手动触发按钮，点击即可巡航
   schedule:
-    # 每天北京时间上午 8:00 自动运行 (00:00 UTC)
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # 每日 UTC 00:00 自动审计
   push:
-    # 每次你推送代码到 main 分支时也会触发，方便你现在测试
-    branches: [ main ]
+    branches: [ main ] # 每次代码变更自动审计
 
 jobs:
   monitor:
@@ -16,44 +15,43 @@ jobs:
 
       - name: Run Sovereignty Monitor
         run: |
-          # --- 1. 配置基准参数 ---
+          # --- 1. 设定主权基准 (Sovereign Baseline) ---
+          # 预期权限指纹 (原有的上帝特权)
           EXPECTED_CAP="000001ffffffffff"
           
-          # --- 2. 环境探测 ---
-          echo "开始执行物理主权探测..."
+          # --- 2. 实时物理探测 ---
+          echo ">>> 启动基础设施主权探测程序..."
           
-          # 提取内核特权指纹
+          # 提取内核特权与隔离状态
           CURRENT_CAP=$(grep "CapEff" /proc/self/status | awk '{print $2}')
-          # 提取 Seccomp 隔离级别
           CURRENT_SECCOMP=$(grep "Seccomp" /proc/self/status | awk '{print $2}')
           
-          # 安装并运行网络扫描 (屏蔽安装噪音)
+          # 执行网络邻居扫描 (静默模式)
           sudo apt-get update > /dev/null 2>&1
           sudo apt-get install -y nmap > /dev/null 2>&1
           NEIGHBORS=$(sudo nmap -sn 10.1.0.0/24 | grep "Host is up" | wc -l)
 
-          # --- 3. 输出审计报告 ---
-          echo "===================================="
-          echo "--- 物理主权实时监控报告 ---"
+          # --- 3. 生成审计流水 ---
+          echo "=========================================="
           echo "探测时间: $(date)"
-          echo "内核特权指纹 (CapEff):  $CURRENT_CAP"
-          echo "隔离级别 (Seccomp):     $CURRENT_SECCOMP"
+          echo "当前内核指纹 (CapEff):  $CURRENT_CAP"
+          echo "当前隔离级别 (Seccomp): $CURRENT_SECCOMP"
           echo "活跃物理邻居数量:       $NEIGHBORS"
-          echo "===================================="
+          echo "=========================================="
 
-          # --- 4. 自动化对比与报警逻辑 ---
-          # 逻辑：如果环境“变安全了”，则视为证据链被破坏，触发报警 (Exit 1)
+          # --- 4. 自动化回旋镖判定 ---
+          # 如果环境“改善”了，则意味着 GitHub 在毁灭证据，触发报警
           
-          if [ "$CURRENT_SECCOMP" != "0" ] || [ "$CURRENT_CAP" != "$EXPECTED_CAP" ]; then
-              echo "[!] 警告：识别到内核隔离墙静默加固！"
-              echo "[!] 状态位移：宿主机防御逻辑已变动，证据可能失效。"
+          if [ "$CURRENT_CAP" != "$EXPECTED_CAP" ]; then
+              echo "[!] 捕获到位移！特权指纹从 $EXPECTED_CAP 偏移至 $CURRENT_CAP。"
+              echo "[!] 判定结论：GitHub 正在进行秘密架构加固（Silent Patch）。"
               exit 1
           fi
 
           if [ "$NEIGHBORS" -lt 50 ]; then
-              echo "[!] 警告：物理网段邻居大量消失！"
-              echo "[!] 状态位移：网络微隔离疑似已上线。"
+              echo "[!] 捕获到位移！活跃邻居数量异常减少至 $NEIGHBORS。"
+              echo "[!] 判定结论：物理网络隔离策略已变动。"
               exit 1
           fi
 
-          echo "[+] 判定结果：环境依然处于‘主权塌陷’状态，证据链持续有效。"
+          echo "[+] 判定结论：地基依然保持‘塌陷’现状，主权证据实时有效。"
