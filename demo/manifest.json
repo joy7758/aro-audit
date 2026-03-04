@@ -1,0 +1,13 @@
+{
+  "profile": "AROAUDIT_PROFILE_V1",
+  "version": "v1",
+  "created": "2026-02-xxT00:00:00Z",
+  "artifacts": [
+    {
+      "name": "journal",
+      "path": "demo/journal.jsonl",
+      "hash_alg": "sha256",
+      "hash": "TBD"
+    }
+  ]
+}

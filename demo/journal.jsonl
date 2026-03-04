@@ -1,0 +1,2 @@
+{"t":"2026-02-xxT00:00:00Z","event":"demo_created","note":"This is a demo audit journal."}
+{"t":"2026-02-xxT00:00:10Z","event":"manifest_linked","note":"Manifest points to this journal."}
