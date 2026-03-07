@@ -14,44 +14,71 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Sovereignty Monitor
+        id: sovereign_monitor
+        env:
+          EXPECTED_CAP: ${{ vars.ARO_AUDIT_EXPECTED_CAP || '000001ffffffffff' }}
+          MIN_NEIGHBORS: ${{ vars.ARO_AUDIT_MIN_NEIGHBORS || '50' }}
+          STRICT_MODE: ${{ vars.ARO_AUDIT_MONITOR_STRICT || 'false' }}
         run: |
-          # --- 1. 设定主权基准 (Sovereign Baseline) ---
-          # 预期权限指纹 (原有的上帝特权)
-          EXPECTED_CAP="000001ffffffffff"
-          
           # --- 2. 实时物理探测 ---
           echo ">>> 启动基础设施主权探测程序..."
-          
+
           # 提取内核特权与隔离状态
           CURRENT_CAP=$(grep "CapEff" /proc/self/status | awk '{print $2}')
           CURRENT_SECCOMP=$(grep "Seccomp" /proc/self/status | awk '{print $2}')
-          
+
           # 执行网络邻居扫描 (静默模式)
           sudo apt-get update > /dev/null 2>&1
           sudo apt-get install -y nmap > /dev/null 2>&1
           NEIGHBORS=$(sudo nmap -sn 10.1.0.0/24 | grep "Host is up" | wc -l)
 
-          # --- 3. 生成审计流水 ---
-          echo "=========================================="
-          echo "探测时间: $(date)"
-          echo "当前内核指纹 (CapEff):  $CURRENT_CAP"
-          echo "当前隔离级别 (Seccomp): $CURRENT_SECCOMP"
-          echo "活跃物理邻居数量:       $NEIGHBORS"
-          echo "=========================================="
+          drift_detected="false"
+          drift_reasons=()
 
-          # --- 4. 自动化回旋镖判定 ---
-          # 如果环境“改善”了，则意味着 GitHub 在毁灭证据，触发报警
-          
-          if [ "$CURRENT_CAP" != "$EXPECTED_CAP" ]; then
-              echo "[!] 捕获到位移！特权指纹从 $EXPECTED_CAP 偏移至 $CURRENT_CAP。"
-              echo "[!] 判定结论：GitHub 正在进行秘密架构加固（Silent Patch）。"
-              exit 1
+          if [ "${CURRENT_CAP}" != "${EXPECTED_CAP}" ]; then
+              drift_detected="true"
+              drift_reasons+=("特权指纹偏移：expected=${EXPECTED_CAP}, current=${CURRENT_CAP}")
           fi
 
-          if [ "$NEIGHBORS" -lt 50 ]; then
-              echo "[!] 捕获到位移！活跃邻居数量异常减少至 $NEIGHBORS。"
-              echo "[!] 判定结论：物理网络隔离策略已变动。"
-              exit 1
+          if [ "${NEIGHBORS}" -lt "${MIN_NEIGHBORS}" ]; then
+              drift_detected="true"
+              drift_reasons+=("活跃邻居数量低于阈值：current=${NEIGHBORS}, min=${MIN_NEIGHBORS}")
           fi
 
-          echo "[+] 判定结论：地基依然保持‘塌陷’现状，主权证据实时有效。"
+          echo "drift_detected=${drift_detected}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "## Sovereignty monitor"
+            echo ""
+            echo "- 探测时间: $(date)"
+            echo "- 当前内核指纹 (CapEff): ${CURRENT_CAP}"
+            echo "- 当前隔离级别 (Seccomp): ${CURRENT_SECCOMP}"
+            echo "- 活跃物理邻居数量: ${NEIGHBORS}"
+            echo "- 严格模式: ${STRICT_MODE}"
+            echo ""
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if [ "${drift_detected}" = "true" ]; then
+            {
+              echo "### Drift detected"
+              printf '%s\n' "${drift_reasons[@]}" | sed 's/^/- /'
+              echo ""
+            } >> "${GITHUB_STEP_SUMMARY}"
+
+            echo "[!] 捕获到环境位移："
+            printf ' - %s\n' "${drift_reasons[@]}"
+
+            if [ "${STRICT_MODE}" = "true" ]; then
+              echo "[!] STRICT_MODE=true，工作流将失败。"
+              exit 1
+            fi
+
+            echo "[!] STRICT_MODE=false，保留记录但不让工作流失败。"
+            exit 0
+          fi
+
+          {
+            echo "### Result"
+            echo "- 未检测到超出阈值的环境位移。"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          echo "[+] 判定结论：环境处于预期范围内。"
