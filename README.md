@@ -6,6 +6,13 @@
 
 一句话：`ARO Audit` 不是单纯记录工具，而是高风险 AI 动作治理控制面（CI 门禁 + 动作边界收据 + 事后复验）。
 
+## Digital Biosphere Ecosystem
+
+This repository is part of the **Digital Biosphere Architecture**.
+
+Architecture overview:
+https://github.com/joy7758/digital-biosphere-architecture
+
 <!-- SEARCH_VISIBILITY_BEGIN -->
 ## Discoverability Snapshot / 检索曝光摘要
 
