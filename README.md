@@ -11,7 +11,7 @@
 This repository is part of the **Digital Biosphere Architecture**.
 
 Architecture overview:
-https://github.com/joy7758/digital-biosphere-architecture
+[digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture)
 
 <!-- SEARCH_VISIBILITY_BEGIN -->
 ## Discoverability Snapshot / 检索曝光摘要
