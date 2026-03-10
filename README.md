@@ -11,6 +11,12 @@ This repo focuses on execution receipts, evidence trails, and verifiable run rec
 
 一句话：`ARO Audit` 不是单纯记录工具，而是高风险 AI 动作治理控制面（CI 门禁 + 动作边界收据 + 事后复验）。
 
+## Architecture Context
+
+This repository is part of the [Digital Biosphere Architecture](https://github.com/joy7758/digital-biosphere-architecture) ecosystem.
+It contributes the Audit Evidence Layer rather than trying to be the whole stack.
+Its focus is exportable records, evidence bundles, and audit verification workflows.
+
 ## Role in the Kit
 
 - Produces execution receipts for agent runs.
@@ -44,13 +50,6 @@ This adapter shows how a compact execution receipt can be emitted after a run.
 - [Execution Receipt Demo](docs/demos/execution-receipt-demo.md)
 - [Agent Run Input Example](examples/receipts/agent-run.input.example.json)
 - [Agent Run Receipt Example](examples/receipts/agent-run.receipt.example.json)
-
-## Digital Biosphere Ecosystem
-
-This repository is part of the **Digital Biosphere Architecture**.
-
-Architecture overview:
-[digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture)
 
 <!-- SEARCH_VISIBILITY_BEGIN -->
 ## Discoverability Snapshot / 检索曝光摘要
