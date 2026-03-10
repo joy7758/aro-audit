@@ -4,7 +4,26 @@
 
 # ARO Audit
 
+*Execution receipts and evidence for verifiable agent runs.*
+
+Part of the Agent Runtime Safety Kit, alongside Token Governor and God Spear.  
+This repo focuses on execution receipts, evidence trails, and verifiable run records.
+
 一句话：`ARO Audit` 不是单纯记录工具，而是高风险 AI 动作治理控制面（CI 门禁 + 动作边界收据 + 事后复验）。
+
+## Role in the Kit
+
+- Produces execution receipts for agent runs.
+- Captures run evidence and audit trails for later review.
+- Complements cost governance and trust gates.
+- Useful for verifiable agent runs and review workflows.
+- Designed as a composable runtime control component.
+
+## Related Projects
+
+- [Token Governor](https://github.com/joy7758/token-governor)
+- [God Spear](https://github.com/joy7758/god-spear)
+- [Agent Runtime Safety Kit Overview](https://github.com/joy7758/token-governor/blob/main/docs/agent-runtime-safety-kit.md)
 
 ## Digital Biosphere Ecosystem
 
