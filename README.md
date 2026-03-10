@@ -32,7 +32,12 @@ This repo focuses on execution receipts, evidence trails, and verifiable run rec
 - [God Spear](https://github.com/joy7758/god-spear)
 - [Agent Runtime Safety Kit Overview](https://github.com/joy7758/token-governor/blob/main/docs/agent-runtime-safety-kit.md)
 
-This adapter can sit before model execution, while ARO Audit can emit a compact receipt after the run.
+## External Adapter
+
+For a minimal LangChain post-run receipt example, see:
+https://github.com/joy7758/aro-audit-langchain-receipt
+
+This adapter shows how a compact execution receipt can be emitted after a run.
 
 ## Demo Assets
 
