@@ -1,0 +1,11 @@
+{
+  "run_id": "run_receipt_demo_001",
+  "actor": "ops-review-agent",
+  "model": "small-general-model",
+  "tools": [
+    "search_docs",
+    "read_price_table"
+  ],
+  "task": "Prepare a short procurement summary for internal review.",
+  "input_summary": "Use the approved supplier list and this week's vendor notes."
+}

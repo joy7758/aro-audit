@@ -1,0 +1,23 @@
+{
+  "run_id": "run_receipt_demo_001",
+  "created_at": "2026-03-11T09:30:00Z",
+  "actor": "ops-review-agent",
+  "model": "small-general-model",
+  "tools": [
+    "search_docs",
+    "read_price_table"
+  ],
+  "input_summary": "Prepared a short procurement summary from approved internal sources.",
+  "output_summary": "Returned a concise vendor summary with no external actions taken.",
+  "policy_signals": [
+    "approved_sources_only",
+    "no_sensitive_export",
+    "review_ready"
+  ],
+  "cost_summary": {
+    "currency": "USD",
+    "estimated_cost": 0.018,
+    "budget_status": "within_window"
+  },
+  "outcome": "completed"
+}

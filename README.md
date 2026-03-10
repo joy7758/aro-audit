@@ -19,11 +19,23 @@ This repo focuses on execution receipts, evidence trails, and verifiable run rec
 - Useful for verifiable agent runs and review workflows.
 - Designed as a composable runtime control component.
 
+## Quick Demo
+
+- This repo provides execution receipts and evidence trails.
+- See the demo doc and example receipt below.
+- It is designed to complement Token Governor and God Spear.
+
 ## Related Projects
 
 - [Token Governor](https://github.com/joy7758/token-governor)
 - [God Spear](https://github.com/joy7758/god-spear)
 - [Agent Runtime Safety Kit Overview](https://github.com/joy7758/token-governor/blob/main/docs/agent-runtime-safety-kit.md)
+
+## Demo Assets
+
+- [Execution Receipt Demo](docs/demos/execution-receipt-demo.md)
+- [Agent Run Input Example](examples/receipts/agent-run.input.example.json)
+- [Agent Run Receipt Example](examples/receipts/agent-run.receipt.example.json)
 
 ## Digital Biosphere Ecosystem
 
