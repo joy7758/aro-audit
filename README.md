@@ -4,27 +4,28 @@
 
 # ARO Audit
 
-*Execution receipts and evidence for verifiable agent runs.*
+*Audit evidence layer for bounded, reviewable, and replay-oriented AI execution artifacts.*
 
-Part of the Agent Runtime Safety Kit, alongside Token Governor and God Spear.  
-This repo focuses on execution receipts, evidence trails, and verifiable run records.
+ARO Audit is the Audit Evidence Layer of the [Digital Biosphere Architecture](https://github.com/joy7758/digital-biosphere-architecture). This repository focuses on one layer of the broader architecture rather than a full agent stack, and it is intended to compose with external runtimes plus adjacent governance and execution-integrity layers.
 
-一句话：`ARO Audit` 不是单纯记录工具，而是高风险 AI 动作治理控制面（CI 门禁 + 动作边界收据 + 事后复验）。
+It is not just logging. Its focus is bounded audit evidence, verification and replay surfaces, and conformance-oriented review for verifiable agent runs.
+
+Part of the Agent Runtime Safety Kit, alongside Token Governor and God Spear.
 
 ## Architecture Context
 
 This repository is a focused layer in the [Digital Biosphere Architecture](https://github.com/joy7758/digital-biosphere-architecture) ecosystem.
 It does not try to be the full stack.
 It contributes the Audit Evidence Layer for verifiable AI systems.
-Its focus is exportable records, evidence bundles, and audit verification workflows.
+Its focus is exportable records, evidence bundles, replay verification, and conformance-oriented audit workflows.
 
 ## Role in the Kit
 
-- Produces execution receipts for agent runs.
-- Captures run evidence and audit trails for later review.
-- Complements cost governance and trust gates.
-- Useful for verifiable agent runs and review workflows.
-- Designed as a composable runtime control component.
+- Produces bounded execution receipts and evidence bundles for agent runs.
+- Supports verification, replay, and conformance-oriented review rather than raw logging alone.
+- Complements governance controls and trust gates with reviewable post-run artifacts.
+- Useful for verifiable agent runs and external review workflows.
+- Designed as a composable audit-evidence component.
 
 ## Quick Demo
 
