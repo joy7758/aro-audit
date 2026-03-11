@@ -52,6 +52,15 @@ This adapter shows how a compact execution receipt can be emitted after a run.
 - [Agent Run Input Example](examples/receipts/agent-run.input.example.json)
 - [Agent Run Receipt Example](examples/receipts/agent-run.receipt.example.json)
 
+For a broader list of fixtures and example artifacts, see
+[docs/fixture-index.md](docs/fixture-index.md).
+
+## Standards Hardening
+
+- [Threat model](docs/threat-model.md)
+- [Conformance vectors](docs/conformance-vectors-rc1-plus.md)
+- [Evidence boundary](docs/evidence-boundary.md)
+
 <!-- SEARCH_VISIBILITY_BEGIN -->
 ## Discoverability Snapshot / 检索曝光摘要
 
