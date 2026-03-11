@@ -1,0 +1,5 @@
+{
+  "intent_ref": "interaction://demo/intent.json",
+  "execution_trace_ref": "trace://demo/run-001",
+  "audit_receipt": "aro://receipts/run-001"
+}

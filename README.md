@@ -19,6 +19,14 @@ It does not try to be the full stack.
 It contributes the Audit Evidence Layer for verifiable AI systems.
 Its focus is exportable records, evidence bundles, replay verification, and conformance-oriented audit workflows.
 
+## Position in the Five-Layer Stack
+
+- POP = identity
+- Agent Intent Protocol = interaction semantics
+- Token Governor = pre-execution governance
+- MVK = execution integrity
+- ARO-Audit = post-execution evidence and receipts
+
 ## Role in the Kit
 
 - Produces bounded execution receipts and evidence bundles for agent runs.
@@ -35,6 +43,8 @@ Its focus is exportable records, evidence bundles, replay verification, and conf
 
 ## Related Projects
 
+- [Agent Intent Protocol](https://github.com/joy7758/agent-intent-protocol)
+- [Verifiable Agent Demo](https://github.com/joy7758/verifiable-agent-demo)
 - [Token Governor](https://github.com/joy7758/token-governor)
 - [Token Governor LangChain Middleware](https://github.com/joy7758/token-governor-langchain-middleware)
 - [God Spear](https://github.com/joy7758/god-spear)
