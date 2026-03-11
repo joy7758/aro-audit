@@ -13,8 +13,9 @@ This repo focuses on execution receipts, evidence trails, and verifiable run rec
 
 ## Architecture Context
 
-This repository is part of the [Digital Biosphere Architecture](https://github.com/joy7758/digital-biosphere-architecture) ecosystem.
-It contributes the Audit Evidence Layer rather than trying to be the whole stack.
+This repository is a focused layer in the [Digital Biosphere Architecture](https://github.com/joy7758/digital-biosphere-architecture) ecosystem.
+It does not try to be the full stack.
+It contributes the Audit Evidence Layer for verifiable AI systems.
 Its focus is exportable records, evidence bundles, and audit verification workflows.
 
 ## Role in the Kit
