@@ -1,0 +1,9 @@
+{
+  "agent_id": "agent-governance-benchmark/governed",
+  "persona_id": "governed-analyst",
+  "interaction_trace": [],
+  "policy_decisions": [],
+  "timestamp": "2026-03-13T12:00:00+00:00",
+  "tool_calls": [],
+  "result_summary": "This example intentionally omits execution_hash."
+}

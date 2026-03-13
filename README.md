@@ -66,6 +66,39 @@ This adapter shows how a compact execution receipt can be emitted after a run.
 For a broader list of fixtures and example artifacts, see
 [docs/fixture-index.md](docs/fixture-index.md).
 
+## Evidence Object Standard
+
+Defines a portable audit evidence object for AI runtime actions.
+
+- Schema: `schema/evidence.schema.json`
+- Validator: `validator.py`
+- Valid example: `examples/minimal_evidence.json`
+- Invalid example: `examples/invalid_missing_field.json`
+
+Validation:
+
+```bash
+python validator.py examples/minimal_evidence.json
+python validator.py examples/invalid_missing_field.json
+```
+
+## CrewAI Integration Example
+
+Use `plugins/crewai_audit_plugin.py` to capture a CrewAI execution trace and
+emit a portable evidence object.
+
+```bash
+python examples/crewai_audit_demo.py
+```
+
+## Governance Conformance Tests
+
+Defines minimum requirements for governance-compatible agents.
+
+```bash
+pytest conformance -q
+```
+
 ## Standards Hardening
 
 - [Threat model](docs/threat-model.md)

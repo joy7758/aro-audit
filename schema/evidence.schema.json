@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joy7758/aro-audit/schema/evidence.schema.json",
+  "title": "ARO Audit Evidence Object",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_id",
+    "persona_id",
+    "interaction_trace",
+    "policy_decisions",
+    "execution_hash",
+    "timestamp",
+    "tool_calls",
+    "result_summary"
+  ],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "persona_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "interaction_trace": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "policy_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "execution_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tool_calls": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "result_summary": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
