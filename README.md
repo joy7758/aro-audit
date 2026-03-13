@@ -82,6 +82,14 @@ python validator.py examples/minimal_evidence.json
 python validator.py examples/invalid_missing_field.json
 ```
 
+## FDO Evidence Object Profile
+
+Use the FDO-oriented profile documents for object-type positioning and handle
+examples:
+
+- `fdo-profile/evidence_object_profile.md`
+- `fdo-profile/example_evidence_object.json`
+
 ## CrewAI Integration Example
 
 Use `plugins/crewai_audit_plugin.py` to capture a CrewAI execution trace and
