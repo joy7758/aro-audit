@@ -11,7 +11,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parent
 SCHEMA_PATH = ROOT / "schema" / "evidence.schema.json"
 REQUIRED_FIELDS = [
