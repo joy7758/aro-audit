@@ -1,8 +1,12 @@
+# aro-audit
+
+![CI](https://github.com/joy7758/aro-audit/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 <p align="center">
   <img src="docs/assets/aro-audit-logo.svg" alt="ARO Audit logo" width="460" />
 </p>
-
-# ARO Audit
 
 *Audit evidence layer for bounded, reviewable, and replay-oriented AI execution artifacts.*
 
